@@ -6,22 +6,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val ShuleeColorScheme = darkColorScheme(
-    primary = AmberPrimary,
+    primary = EmeraldLight,
     onPrimary = Color.White,
-    primaryContainer = SlateSurfaceLight,
-    onPrimaryContainer = TextPrimary,
-    secondary = EmeraldDistinct,
+    primaryContainer = EmeraldPrimary,
+    onPrimaryContainer = Color.White,
+    secondary = RoyalIndigo,
     onSecondary = Color.White,
-    secondaryContainer = EmeraldDistinct.copy(alpha = 0.2f),
-    tertiary = FlameOrange,
+    secondaryContainer = RoyalIndigoContainer,
+    onSecondaryContainer = Color.White,
+    tertiary = SunnyAmber,
     onTertiary = Color.White,
+    tertiaryContainer = SunnyAmberContainer,
     background = SlateCanvas,
     onBackground = TextPrimary,
     surface = SlateSurface,
     onSurface = TextPrimary,
     surfaceVariant = SlateSurfaceLight,
     onSurfaceVariant = TextSecondary,
-    outline = SlateBorder
+    outline = SlateBorder,
+    error = CoralSalmon,
+    onError = Color.White
 )
 
 @Composable
