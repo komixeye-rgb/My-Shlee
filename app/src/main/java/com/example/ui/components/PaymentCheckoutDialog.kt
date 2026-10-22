@@ -34,8 +34,8 @@ fun PaymentCheckoutDialog(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    var phoneNumber by remember { mutableStateOf("0772123456") }
     var selectedProvider by remember { mutableStateOf("MTN Mobile Money") }
+    var phoneNumber by remember { mutableStateOf("0775551996") }
     var isProcessing by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
 
@@ -146,7 +146,14 @@ fun PaymentCheckoutDialog(
                         providers.forEach { provider ->
                             val isSelected = selectedProvider == provider
                             OutlinedButton(
-                                onClick = { selectedProvider = provider },
+                                onClick = { 
+                                    selectedProvider = provider
+                                    phoneNumber = when {
+                                        provider.contains("MTN") -> "0775551996"
+                                        provider.contains("Airtel") -> "0704556555"
+                                        else -> "Merchant Account"
+                                    }
+                                },
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.outlinedButtonColors(
                                     containerColor = if (isSelected) AmberPrimary.copy(alpha = 0.2f) else SlateSurfaceLight,
