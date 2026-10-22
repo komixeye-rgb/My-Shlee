@@ -48,6 +48,13 @@ data class SubjectScore(
         }
 }
 
+data class DailyStudyTask(
+    val id: String,
+    val title: String,
+    val subjectTag: String,
+    val isCompleted: Boolean = false
+)
+
 data class FocusArea(
     val subjectId: String,
     val subjectName: String,
