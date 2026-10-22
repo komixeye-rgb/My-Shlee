@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Share
@@ -39,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.R
 import com.example.model.SubjectScore
+import com.example.model.SubscriptionPlan
+import com.example.model.PaymentTransaction
 import com.example.ui.components.*
 import com.example.ui.theme.*
 
@@ -53,12 +56,15 @@ fun StudentDashboardScreen(
     val subjectScores by viewModel.subjectScores.collectAsStateWithLifecycle()
     val leaderboardCandidates by viewModel.leaderboardCandidates.collectAsStateWithLifecycle()
     val selectedFilter by viewModel.selectedFilter.collectAsStateWithLifecycle()
+    val subscriptionPlans by viewModel.subscriptionPlans.collectAsStateWithLifecycle()
+    val paymentTransactions by viewModel.paymentTransactions.collectAsStateWithLifecycle()
 
-    var activeTab by remember { mutableIntStateOf(0) } // 0 = Overview & Radar, 1 = Leaderboard, 2 = Daily Goals
+    var activeTab by remember { mutableIntStateOf(0) } // 0 = Radar, 1 = Leaderboard, 2 = Daily Goals, 3 = Payments
     var showShareModal by remember { mutableStateOf(false) }
     var showAuthModal by remember { mutableStateOf(false) }
     var selectedAiSubject by remember { mutableStateOf<SubjectScore?>(null) }
     var selectedPracticeSubject by remember { mutableStateOf<SubjectScore?>(null) }
+    var selectedPlanForCheckout by remember { mutableStateOf<SubscriptionPlan?>(null) }
 
     val mainScrollState = rememberScrollState()
 
@@ -184,17 +190,20 @@ fun StudentDashboardScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Navigation Tabs with smooth selection transitions
-            TabRow(
+            // Navigation Tabs with smooth selection transitions (4 Tabs)
+            ScrollableTabRow(
                 selectedTabIndex = activeTab,
                 containerColor = SlateSurface,
                 contentColor = AmberPrimary,
+                edgePadding = 0.dp,
                 indicator = { tabPositions ->
-                    TabRowDefaults.SecondaryIndicator(
-                        modifier = Modifier.tabIndicatorOffset(tabPositions[activeTab]),
-                        height = 3.dp,
-                        color = AmberPrimary
-                    )
+                    if (activeTab < tabPositions.size) {
+                        TabRowDefaults.SecondaryIndicator(
+                            modifier = Modifier.tabIndicatorOffset(tabPositions[activeTab]),
+                            height = 3.dp,
+                            color = AmberPrimary
+                        )
+                    }
                 },
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
@@ -243,6 +252,21 @@ fun StudentDashboardScreen(
                     selectedContentColor = AmberPrimary,
                     unselectedContentColor = TextSecondary,
                     modifier = Modifier.testTag("tab_daily_goals")
+                )
+
+                Tab(
+                    selected = activeTab == 3,
+                    onClick = { activeTab = 3 },
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Payments, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Payments", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        }
+                    },
+                    selectedContentColor = AmberPrimary,
+                    unselectedContentColor = TextSecondary,
+                    modifier = Modifier.testTag("tab_payments")
                 )
             }
 
@@ -296,6 +320,18 @@ fun StudentDashboardScreen(
                             onReminderTimeChanged = { viewModel.updateReminderTime(it) }
                         )
                     }
+
+                    3 -> {
+                        LandingPricingSection(
+                            plans = subscriptionPlans,
+                            onSelectPlan = { plan ->
+                                selectedPlanForCheckout = plan
+                            },
+                            onAuthClick = {
+                                showAuthModal = true
+                            }
+                        )
+                    }
                 }
             }
 
@@ -304,6 +340,16 @@ fun StudentDashboardScreen(
     }
 
     // Modals & Dialogs
+    selectedPlanForCheckout?.let { plan ->
+        PaymentCheckoutDialog(
+            plan = plan,
+            onPaymentSuccess = { subscribedPlan ->
+                viewModel.addPaymentTransaction(subscribedPlan)
+            },
+            onDismiss = { selectedPlanForCheckout = null }
+        )
+    }
+
     if (showAuthModal) {
         AuthModal(
             isLoggedIn = isLoggedIn,

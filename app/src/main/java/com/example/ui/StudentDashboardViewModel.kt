@@ -57,6 +57,57 @@ class StudentDashboardViewModel : ViewModel() {
     )
     val leaderboardCandidates: StateFlow<List<LeaderboardCandidate>> = _leaderboardCandidates.asStateFlow()
 
+    private val _subscriptionPlans = MutableStateFlow(
+        listOf(
+            SubscriptionPlan(
+                id = "plan_basic",
+                name = "Shlee Free Revision",
+                priceUgx = "UGX 0",
+                period = "Forever",
+                features = listOf("Basic UNEB Quizzes", "Standard Radar Analytics", "Community Leaderboard Access"),
+                isPopular = false
+            ),
+            SubscriptionPlan(
+                id = "plan_premium",
+                name = "Shlee UNEB Distinction Pass",
+                priceUgx = "UGX 10,000",
+                period = "Per Month",
+                features = listOf("Unlimited High-Thinking AI Tutor (gemini-4-argon)", "All UNEB Past Papers (2010–2026)", "Leaderboard Verified Badge & Priority Rank", "Offline PDF Exam Downloads"),
+                isPopular = true
+            ),
+            SubscriptionPlan(
+                id = "plan_term",
+                name = "Shlee Term Masterclass",
+                priceUgx = "UGX 35,000",
+                period = "Full Term",
+                features = listOf("All Distinction Pass Features", "1-on-1 Master Examiner Live Q&A", "Personalized Weakness Remediation Plan"),
+                isPopular = false
+            )
+        )
+    )
+    val subscriptionPlans: StateFlow<List<SubscriptionPlan>> = _subscriptionPlans.asStateFlow()
+
+    private val _paymentTransactions = MutableStateFlow(
+        listOf(
+            PaymentTransaction("tx_01", "Shlee UNEB Distinction Pass", "UGX 10,000", "MTN Mobile Money", "12 Oct 2026", "SUCCESS")
+        )
+    )
+    val paymentTransactions: StateFlow<List<PaymentTransaction>> = _paymentTransactions.asStateFlow()
+
+    fun addPaymentTransaction(plan: SubscriptionPlan) {
+        val newTx = PaymentTransaction(
+            id = "tx_${System.currentTimeMillis()}",
+            planName = plan.name,
+            amountUgx = plan.priceUgx,
+            paymentMethod = "MTN Mobile Money",
+            date = "Today",
+            status = "SUCCESS"
+        )
+        val current = _paymentTransactions.value.toMutableList()
+        current.add(0, newTx)
+        _paymentTransactions.value = current
+    }
+
     private val _selectedFilter = MutableStateFlow("All Levels")
     val selectedFilter: StateFlow<String> = _selectedFilter.asStateFlow()
 

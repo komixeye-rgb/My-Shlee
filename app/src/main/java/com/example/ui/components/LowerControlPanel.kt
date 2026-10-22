@@ -10,8 +10,8 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.PieChart
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -119,7 +119,7 @@ fun LowerControlPanel(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Navigation Bar
+            // Navigation Bar with 4 Tabs
             NavigationBar(
                 containerColor = Color.Transparent,
                 contentColor = TextSecondary,
@@ -130,10 +130,10 @@ fun LowerControlPanel(
                     selected = activeTab == 0,
                     onClick = { onTabSelected(0) },
                     icon = {
-                        Icon(Icons.Default.PieChart, contentDescription = "Radar & Mastery", modifier = Modifier.size(20.dp))
+                        Icon(Icons.Default.PieChart, contentDescription = "Radar & Mastery", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Radar & Mastery", fontSize = 10.sp, fontWeight = if (activeTab == 0) FontWeight.Bold else FontWeight.Normal)
+                        Text("Radar", fontSize = 9.sp, fontWeight = if (activeTab == 0) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
@@ -149,10 +149,10 @@ fun LowerControlPanel(
                     selected = activeTab == 1,
                     onClick = { onTabSelected(1) },
                     icon = {
-                        Icon(Icons.Default.EmojiEvents, contentDescription = "Leaderboard", modifier = Modifier.size(20.dp))
+                        Icon(Icons.Default.EmojiEvents, contentDescription = "Leaderboard", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Leaderboard", fontSize = 10.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
+                        Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
@@ -168,10 +168,10 @@ fun LowerControlPanel(
                     selected = activeTab == 2,
                     onClick = { onTabSelected(2) },
                     icon = {
-                        Icon(Icons.Default.Alarm, contentDescription = "Goals & Alarms", modifier = Modifier.size(20.dp))
+                        Icon(Icons.Default.Alarm, contentDescription = "Daily Goals", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Daily Goals", fontSize = 10.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
+                        Text("Daily Goals", fontSize = 9.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
@@ -181,6 +181,25 @@ fun LowerControlPanel(
                         unselectedTextColor = TextSecondary
                     ),
                     modifier = Modifier.testTag("nav_item_goals")
+                )
+
+                NavigationBarItem(
+                    selected = activeTab == 3,
+                    onClick = { onTabSelected(3) },
+                    icon = {
+                        Icon(Icons.Default.Payments, contentDescription = "Payments", modifier = Modifier.size(18.dp))
+                    },
+                    label = {
+                        Text("Payments", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AmberPrimary,
+                        selectedTextColor = AmberPrimary,
+                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        unselectedIconColor = TextSecondary,
+                        unselectedTextColor = TextSecondary
+                    ),
+                    modifier = Modifier.testTag("nav_item_payments")
                 )
             }
         }
