@@ -1,0 +1,188 @@
+package com.example.ui.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.PieChart
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.model.SubjectScore
+import com.example.model.UserProfile
+import com.example.ui.theme.*
+
+@Composable
+fun LowerControlPanel(
+    activeTab: Int,
+    onTabSelected: (Int) -> Unit,
+    userProfile: UserProfile,
+    weakestSubject: SubjectScore?,
+    onQuickPracticeClick: () -> Unit,
+    onQuickAiTutorClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = SlateSurface,
+        tonalElevation = 8.dp,
+        border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag("lower_control_panel")
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            // Quick Control Action Strip
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(SlateCanvas)
+                    .border(1.dp, SlateBorder.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Streak & Goal Indicator
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("🔥 ${userProfile.currentStreak}d", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = FlameLight)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Goal: ${userProfile.dailyQuizCompleted}/${userProfile.dailyQuizGoal}",
+                        fontSize = 11.sp,
+                        color = TextSecondary
+                    )
+                }
+
+                // Quick Action Buttons
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Quick AI Tutor Button
+                    IconButton(
+                        onClick = onQuickAiTutorClick,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(AmberPrimary.copy(alpha = 0.2f))
+                            .testTag("lower_panel_ai_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AutoAwesome,
+                            contentDescription = "Ask AI Tutor",
+                            tint = AmberLight,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+
+                    // Quick Practice FAB Pill
+                    Button(
+                        onClick = onQuickPracticeClick,
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                        modifier = Modifier.testTag("lower_panel_quick_practice")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Bolt,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "Quick Revise",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // Navigation Bar
+            NavigationBar(
+                containerColor = Color.Transparent,
+                contentColor = TextSecondary,
+                tonalElevation = 0.dp,
+                modifier = Modifier.height(56.dp)
+            ) {
+                NavigationBarItem(
+                    selected = activeTab == 0,
+                    onClick = { onTabSelected(0) },
+                    icon = {
+                        Icon(Icons.Default.PieChart, contentDescription = "Radar & Mastery", modifier = Modifier.size(20.dp))
+                    },
+                    label = {
+                        Text("Radar & Mastery", fontSize = 10.sp, fontWeight = if (activeTab == 0) FontWeight.Bold else FontWeight.Normal)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AmberPrimary,
+                        selectedTextColor = AmberPrimary,
+                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        unselectedIconColor = TextSecondary,
+                        unselectedTextColor = TextSecondary
+                    ),
+                    modifier = Modifier.testTag("nav_item_radar")
+                )
+
+                NavigationBarItem(
+                    selected = activeTab == 1,
+                    onClick = { onTabSelected(1) },
+                    icon = {
+                        Icon(Icons.Default.EmojiEvents, contentDescription = "Leaderboard", modifier = Modifier.size(20.dp))
+                    },
+                    label = {
+                        Text("Leaderboard", fontSize = 10.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AmberPrimary,
+                        selectedTextColor = AmberPrimary,
+                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        unselectedIconColor = TextSecondary,
+                        unselectedTextColor = TextSecondary
+                    ),
+                    modifier = Modifier.testTag("nav_item_leaderboard")
+                )
+
+                NavigationBarItem(
+                    selected = activeTab == 2,
+                    onClick = { onTabSelected(2) },
+                    icon = {
+                        Icon(Icons.Default.Alarm, contentDescription = "Goals & Alarms", modifier = Modifier.size(20.dp))
+                    },
+                    label = {
+                        Text("Daily Goals", fontSize = 10.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AmberPrimary,
+                        selectedTextColor = AmberPrimary,
+                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        unselectedIconColor = TextSecondary,
+                        unselectedTextColor = TextSecondary
+                    ),
+                    modifier = Modifier.testTag("nav_item_goals")
+                )
+            }
+        }
+    }
+}
