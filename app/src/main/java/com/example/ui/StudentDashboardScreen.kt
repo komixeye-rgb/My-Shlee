@@ -14,12 +14,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Alarm
+import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -58,6 +61,9 @@ fun StudentDashboardScreen(
     val selectedFilter by viewModel.selectedFilter.collectAsStateWithLifecycle()
     val subscriptionPlans by viewModel.subscriptionPlans.collectAsStateWithLifecycle()
     val paymentTransactions by viewModel.paymentTransactions.collectAsStateWithLifecycle()
+    val isSupabaseConnected by viewModel.isSupabaseConnected.collectAsStateWithLifecycle()
+    val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
+    val syncStatusMessage by viewModel.syncStatusMessage.collectAsStateWithLifecycle()
 
     var activeTab by remember { mutableIntStateOf(0) } // 0 = Radar, 1 = Leaderboard, 2 = Daily Goals, 3 = Payments
     var showShareModal by remember { mutableStateOf(false) }
@@ -182,9 +188,13 @@ fun StudentDashboardScreen(
                 .padding(16.dp)
                 .animateContentSize()
         ) {
-            // Welcome Header & Streak Banner
+            // Welcome Header & Streak Banner with Supabase Cloud Status
             WelcomeHeaderCard(
                 userProfile = userProfile,
+                isSupabaseConnected = isSupabaseConnected,
+                isSyncing = isSyncing,
+                syncStatusMessage = syncStatusMessage,
+                onRefreshSupabase = { viewModel.refreshFromSupabase() },
                 onShareClick = { showShareModal = true }
             )
 
@@ -414,6 +424,10 @@ private fun Modifier.drawRightScrollbar(
 @Composable
 private fun WelcomeHeaderCard(
     userProfile: com.example.model.UserProfile,
+    isSupabaseConnected: Boolean?,
+    isSyncing: Boolean,
+    syncStatusMessage: String,
+    onRefreshSupabase: () -> Unit,
     onShareClick: () -> Unit
 ) {
     Card(
@@ -424,64 +438,137 @@ private fun WelcomeHeaderCard(
             .fillMaxWidth()
             .animateContentSize()
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Candidate ${userProfile.name}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Surface(color = EmeraldDistinct.copy(alpha = 0.2f), shape = RoundedCornerShape(6.dp)) {
-                        Text(
-                            text = userProfile.projectedAggregate,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = EmeraldLight,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = "ID: ${userProfile.studentId} • UNEB Center 2026",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
-                    fontSize = 11.sp
-                )
-            }
-
-            // Streak Pill
-            Surface(
-                color = FlameOrange.copy(alpha = 0.18f),
-                shape = RoundedCornerShape(12.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, FlameOrange.copy(alpha = 0.5f))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("🔥", fontSize = 16.sp)
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "${userProfile.currentStreak} Days",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = FlameLight,
+                            text = "Candidate ${userProfile.name}",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = TextPrimary,
                             fontWeight = FontWeight.Bold
                         )
-                        Text("Streak", fontSize = 9.sp, color = TextSecondary)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Surface(color = EmeraldDistinct.copy(alpha = 0.2f), shape = RoundedCornerShape(6.dp)) {
+                            Text(
+                                text = userProfile.projectedAggregate,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = EmeraldLight,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                            )
+                        }
                     }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = "ID: ${userProfile.studentId} • UNEB Center 2026",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary,
+                        fontSize = 11.sp
+                    )
+                }
+
+                // Streak Pill
+                Surface(
+                    color = FlameOrange.copy(alpha = 0.18f),
+                    shape = RoundedCornerShape(12.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, FlameOrange.copy(alpha = 0.5f))
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("🔥", fontSize = 16.sp)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = "${userProfile.currentStreak} Days",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = FlameLight,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text("Streak", fontSize = 9.sp, color = TextSecondary)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Cloud Sync Indicator Pill (Supabase SHLEE Project)
+            Surface(
+                onClick = onRefreshSupabase,
+                color = when (isSupabaseConnected) {
+                    true -> EmeraldDistinct.copy(alpha = 0.15f)
+                    false -> FlameOrange.copy(alpha = 0.15f)
+                    else -> SlateSurfaceLight
+                },
+                shape = RoundedCornerShape(8.dp),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    when (isSupabaseConnected) {
+                        true -> EmeraldLight.copy(alpha = 0.35f)
+                        false -> FlameOrange.copy(alpha = 0.35f)
+                        else -> SlateBorder
+                    }
+                ),
+                modifier = Modifier.testTag("supabase_sync_status_chip")
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (isSyncing) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(12.dp),
+                            strokeWidth = 2.dp,
+                            color = AmberPrimary
+                        )
+                    } else {
+                        Icon(
+                            imageVector = when (isSupabaseConnected) {
+                                true -> Icons.Default.CloudDone
+                                false -> Icons.Default.CloudOff
+                                else -> Icons.Default.Sync
+                            },
+                            contentDescription = "Supabase Status",
+                            tint = when (isSupabaseConnected) {
+                                true -> EmeraldLight
+                                false -> FlameLight
+                                else -> TextSecondary
+                            },
+                            modifier = Modifier.size(13.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (isSyncing) "Syncing with Supabase..." else syncStatusMessage,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = when (isSupabaseConnected) {
+                            true -> EmeraldLight
+                            false -> FlameLight
+                            else -> TextSecondary
+                        },
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "• Tap to sync",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = TextSecondary.copy(alpha = 0.7f),
+                        fontSize = 9.sp
+                    )
                 }
             }
         }

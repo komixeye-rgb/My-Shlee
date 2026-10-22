@@ -3,12 +3,22 @@ package com.example.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.model.*
+import com.example.service.SupabaseService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class StudentDashboardViewModel : ViewModel() {
+
+    private val _isSupabaseConnected = MutableStateFlow<Boolean?>(null)
+    val isSupabaseConnected: StateFlow<Boolean?> = _isSupabaseConnected.asStateFlow()
+
+    private val _isSyncing = MutableStateFlow(false)
+    val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
+
+    private val _syncStatusMessage = MutableStateFlow("Initializing Supabase...")
+    val syncStatusMessage: StateFlow<String> = _syncStatusMessage.asStateFlow()
 
     private val _isLoggedIn = MutableStateFlow(true)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
@@ -30,6 +40,40 @@ class StudentDashboardViewModel : ViewModel() {
         )
     )
     val userProfile: StateFlow<UserProfile> = _userProfile.asStateFlow()
+
+    init {
+        refreshFromSupabase()
+    }
+
+    fun refreshFromSupabase() {
+        viewModelScope.launch {
+            _isSyncing.value = true
+            try {
+                val connected = SupabaseService.checkConnection()
+                _isSupabaseConnected.value = connected
+                if (connected) {
+                    _syncStatusMessage.value = "⚡ Supabase Active (SHLEE)"
+                    val remoteCandidates = SupabaseService.fetchLeaderboardFromSupabase()
+                    if (!remoteCandidates.isNullOrEmpty()) {
+                        _leaderboardCandidates.value = remoteCandidates
+                    } else {
+                        // Seed candidates to Supabase if table is fresh
+                        _leaderboardCandidates.value.forEach { candidate ->
+                            SupabaseService.syncCandidate(candidate)
+                        }
+                    }
+                    SupabaseService.syncUserProfile(_userProfile.value)
+                } else {
+                    _syncStatusMessage.value = "Supabase Standby (Offline Mode)"
+                }
+            } catch (e: Exception) {
+                _isSupabaseConnected.value = false
+                _syncStatusMessage.value = "Supabase Standby: ${e.localizedMessage ?: "Offline"}"
+            } finally {
+                _isSyncing.value = false
+            }
+        }
+    }
 
     private val _subjectScores = MutableStateFlow(
         listOf(
@@ -106,6 +150,11 @@ class StudentDashboardViewModel : ViewModel() {
         val current = _paymentTransactions.value.toMutableList()
         current.add(0, newTx)
         _paymentTransactions.value = current
+
+        // Sync transaction to Supabase
+        viewModelScope.launch {
+            SupabaseService.syncTransaction(newTx)
+        }
     }
 
     private val _selectedFilter = MutableStateFlow("All Levels")
@@ -113,7 +162,11 @@ class StudentDashboardViewModel : ViewModel() {
 
     fun loginUser(name: String) {
         _isLoggedIn.value = true
-        _userProfile.value = _userProfile.value.copy(name = name)
+        val updated = _userProfile.value.copy(name = name)
+        _userProfile.value = updated
+        viewModelScope.launch {
+            SupabaseService.syncUserProfile(updated)
+        }
     }
 
     fun logoutUser() {
@@ -125,11 +178,19 @@ class StudentDashboardViewModel : ViewModel() {
     }
 
     fun toggleNotification(enabled: Boolean) {
-        _userProfile.value = _userProfile.value.copy(notificationEnabled = enabled)
+        val updated = _userProfile.value.copy(notificationEnabled = enabled)
+        _userProfile.value = updated
+        viewModelScope.launch {
+            SupabaseService.syncUserProfile(updated)
+        }
     }
 
     fun updateReminderTime(timeStr: String) {
-        _userProfile.value = _userProfile.value.copy(reminderTime = timeStr)
+        val updated = _userProfile.value.copy(reminderTime = timeStr)
+        _userProfile.value = updated
+        viewModelScope.launch {
+            SupabaseService.syncUserProfile(updated)
+        }
     }
 
     fun updateSubjectScore(subjectId: String, newScorePct: Float) {
@@ -147,11 +208,16 @@ class StudentDashboardViewModel : ViewModel() {
             val profile = _userProfile.value
             val newCompleted = (profile.dailyQuizCompleted + 1).coerceAtMost(profile.dailyQuizGoal)
             val newAverage = currentList.map { it.scorePercentage }.average().toFloat()
-            _userProfile.value = profile.copy(
+            val updatedProfile = profile.copy(
                 dailyQuizCompleted = newCompleted,
                 averageScore = newAverage,
                 totalQuizzesTaken = profile.totalQuizzesTaken + 1
             )
+            _userProfile.value = updatedProfile
+
+            viewModelScope.launch {
+                SupabaseService.syncUserProfile(updatedProfile)
+            }
         }
     }
 
