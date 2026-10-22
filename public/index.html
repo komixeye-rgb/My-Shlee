@@ -198,6 +198,23 @@
             font-weight: bold;
         }
 
+        .card-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            background-color: var(--amber-primary);
+            color: #ffffff;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .card-btn:hover {
+            background-color: var(--amber-light);
+            transform: translateY(-2px);
+        }
+
         .payment-info {
             background-color: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
@@ -220,6 +237,145 @@
         .payment-info ul {
             padding-left: 20px;
             margin-top: 8px;
+        }
+
+        /* Modal Styles with Smooth Transitions */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--slate-surface);
+            border: 1px solid var(--slate-border);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            transform: translateY(30px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--slate-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--amber-primary);
+        }
+
+        .modal-actions {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Success Box with Checkmark Animation */
+        .success-box {
+            background-color: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--emerald-light);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            color: var(--emerald-light);
+            font-weight: 600;
+            margin-top: 16px;
+            display: none;
+            animation: fadeInBox 0.4s ease forwards;
+        }
+
+        @keyframes fadeInBox {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .checkmark-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--emerald-light);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+            animation: checkmarkAnim 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        @keyframes checkmarkAnim {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            70% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .instructions {
@@ -344,6 +500,7 @@
                     <li>Gemini AI Tutor</li>
                     <li>Daily Study Targets</li>
                 </ul>
+                <button class="card-btn" onclick="openPaymentModal('7-Day Quick Sprint', 'UGX 5,000')">Initiate Payment</button>
             </div>
 
             <div class="pricing-card popular">
@@ -357,6 +514,7 @@
                     <li>National Leaderboard Access</li>
                     <li>Offline Radar Analytics</li>
                 </ul>
+                <button class="card-btn" onclick="openPaymentModal('Full Term Pass', 'UGX 25,000')">Initiate Payment</button>
             </div>
 
             <div class="pricing-card">
@@ -365,10 +523,11 @@
                 <div class="period">Until Final UNEB Exams</div>
                 <ul class="features-list">
                     <li>All Features Included</li>
-                    <li>1-on-1 UNEB Examiner Reviews</li>
+                    <li>1-on-1 Examiner Reviews</li>
                     <li>Parent Performance Reports</li>
                     <li>Guaranteed Pass Strategy</li>
                 </ul>
+                <button class="card-btn" onclick="openPaymentModal('Final Candidate Pass', 'UGX 60,000')">Initiate Payment</button>
             </div>
         </div>
 
@@ -399,5 +558,83 @@
             Shlee Student Dashboard &bull; UNEB Examination Prep &bull; Native Android App
         </footer>
     </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalPlanTitle">Complete Payment</h2>
+                <button class="close-btn" onclick="closePaymentModal()">&times;</button>
+            </div>
+            <form id="paymentForm" onsubmit="simulatePayment(event)">
+                <div class="form-group">
+                    <label>Selected Plan & Amount</label>
+                    <input type="text" id="modalPlanDetails" class="form-control" readonly style="font-weight: bold; color: var(--amber-light);">
+                </div>
+                <div class="form-group">
+                    <label>Mobile Money Provider</label>
+                    <select id="providerSelect" class="form-control" required>
+                        <option value="MTN">MTN Mobile Money (Merchant: 0775551996)</option>
+                        <option value="Airtel">Airtel Money (Merchant: 0704556555)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phoneNumberInput" class="form-control" placeholder="e.g. 0771234567 or 0701234567" required pattern="07[0-9]{8}">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="card-btn" id="payBtn">Authorize & Send Prompt</button>
+                </div>
+            </form>
+            <div id="successBox" class="success-box">
+                <div class="checkmark-icon">✓</div>
+                <div style="font-size: 1.05rem; font-weight: bold; margin-bottom: 4px;">Payment Prompt Sent!</div>
+                <div style="font-size: 0.9rem; color: var(--text-primary); opacity: 0.9;">Check your phone to enter PIN and complete the transaction.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPaymentModal(planTitle, planPrice) {
+            document.getElementById('modalPlanTitle').innerText = 'Checkout: ' + planTitle;
+            document.getElementById('modalPlanDetails').value = planTitle + ' (' + planPrice + ')';
+            document.getElementById('successBox').style.display = 'none';
+            document.getElementById('paymentForm').style.display = 'block';
+            document.getElementById('phoneNumberInput').value = '';
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function simulatePayment(e) {
+            e.preventDefault();
+            const btn = document.getElementById('payBtn');
+            const successBox = document.getElementById('successBox');
+            const form = document.getElementById('paymentForm');
+
+            btn.innerText = 'Processing USSD Push...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerText = 'Authorize & Send Prompt';
+                btn.disabled = false;
+                form.style.display = 'none';
+                successBox.style.display = 'block';
+                setTimeout(() => {
+                    closePaymentModal();
+                }, 3500);
+            }, 1500);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target == modal) {
+                closePaymentModal();
+            }
+        }
+    </script>
 </body>
 </html>
