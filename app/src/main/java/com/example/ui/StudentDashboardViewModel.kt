@@ -221,6 +221,18 @@ class StudentDashboardViewModel : ViewModel() {
         }
     }
 
+    fun recordCompletedPomodoroSession(durationMinutes: Int = 25) {
+        val profile = _userProfile.value
+        val newSessions = profile.focusSessionsCompleted + 1
+        val updated = profile.copy(
+            focusSessionsCompleted = newSessions
+        )
+        _userProfile.value = updated
+        viewModelScope.launch {
+            SupabaseService.syncUserProfile(updated)
+        }
+    }
+
     fun getSampleQuestionsForSubject(subjectName: String): List<QuizQuestion> {
         return listOf(
             QuizQuestion(

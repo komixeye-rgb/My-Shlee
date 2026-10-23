@@ -31,4 +31,13 @@ class ExampleRobolectricTest {
     org.junit.Assert.assertTrue(uaceMilestones.isNotEmpty())
     assertEquals(6, uceMilestones.size)
   }
+
+  @Test
+  fun `verify pomodoro session recording increments student focus sessions`() {
+    val viewModel = com.example.ui.StudentDashboardViewModel()
+    val initialSessions = viewModel.userProfile.value.focusSessionsCompleted
+    viewModel.recordCompletedPomodoroSession(25)
+    val updatedSessions = viewModel.userProfile.value.focusSessionsCompleted
+    assertEquals(initialSessions + 1, updatedSessions)
+  }
 }

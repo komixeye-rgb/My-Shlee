@@ -206,6 +206,18 @@ fun StudentDashboardScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Pomodoro Study Timer Widget at top of dashboard
+            PomodoroTimerWidget(
+                completedSessions = userProfile.focusSessionsCompleted,
+                onSessionCompleted = { sessionType ->
+                    if (sessionType == PomodoroSessionType.FOCUS_25) {
+                        viewModel.recordCompletedPomodoroSession(25)
+                    }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // Navigation Tabs with smooth selection transitions (5 Tabs)
             ScrollableTabRow(
                 selectedTabIndex = activeTab,

@@ -96,7 +96,8 @@ data class UserProfile(
     val dailyQuizGoal: Int = 5,
     val dailyQuizCompleted: Int = 3,
     val notificationEnabled: Boolean = true,
-    val reminderTime: String = "17:00"
+    val reminderTime: String = "17:00",
+    val focusSessionsCompleted: Int = 4
 )
 
 data class QuizQuestion(
