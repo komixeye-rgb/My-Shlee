@@ -51,8 +51,8 @@ fun AiThinkingTutorDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = SlateSurface,
-            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.85f)
@@ -74,7 +74,7 @@ fun AiThinkingTutorDialog(
                         Icon(
                             imageVector = Icons.Default.AutoAwesome,
                             contentDescription = null,
-                            tint = AmberLight,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
@@ -82,13 +82,13 @@ fun AiThinkingTutorDialog(
                             Text(
                                 text = "UNEB High-Thinking AI Tutor",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = TextPrimary,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "gemini-4-argon • Thinking Level: HIGH",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AmberPrimary,
+                                color = MaterialTheme.colorScheme.primary,
                                 fontSize = 10.sp
                             )
                         }
@@ -98,7 +98,7 @@ fun AiThinkingTutorDialog(
                         onClick = onDismiss,
                         modifier = Modifier.testTag("close_ai_dialog")
                     ) {
-                        Icon(Icons.Default.Close, contentDescription = "Close", tint = TextSecondary)
+                        Icon(Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
@@ -106,7 +106,7 @@ fun AiThinkingTutorDialog(
 
                 // Subject info banner
                 Surface(
-                    color = SlateSurfaceLight,
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -118,13 +118,13 @@ fun AiThinkingTutorDialog(
                         Text(
                             text = "${subject.subjectName}: ${subject.diagnosticTag}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "${subject.scorePercentage.toInt()}%",
                             style = MaterialTheme.typography.labelSmall,
-                            color = FlameOrange,
+                            color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -138,7 +138,7 @@ fun AiThinkingTutorDialog(
                         .weight(1f)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(SlateCanvas)
+                        .background(MaterialTheme.colorScheme.background)
                         .padding(14.dp)
                 ) {
                     if (isLoading) {
@@ -147,12 +147,12 @@ fun AiThinkingTutorDialog(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            CircularProgressIndicator(color = AmberPrimary)
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
                                 text = "Gemini High-Thinking Model Analyzing UNEB Mark Scheme...",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = TextSecondary
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     } else {
@@ -164,7 +164,7 @@ fun AiThinkingTutorDialog(
                             Text(
                                 text = adviceContent ?: "No content generated.",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = TextPrimary,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 lineHeight = 22.sp
                             )
                         }
@@ -181,14 +181,14 @@ fun AiThinkingTutorDialog(
                     OutlinedTextField(
                         value = userPrompt,
                         onValueChange = { userPrompt = it },
-                        placeholder = { Text("Ask follow-up question...", color = TextMuted, fontSize = 12.sp) },
+                        placeholder = { Text("Ask follow-up question...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontSize = 12.sp) },
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = SlateSurfaceLight,
-                            unfocusedContainerColor = SlateSurfaceLight,
-                            focusedBorderColor = AmberPrimary,
-                            unfocusedBorderColor = SlateBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
+                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         ),
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp),
@@ -218,7 +218,7 @@ fun AiThinkingTutorDialog(
                         enabled = userPrompt.isNotBlank() && !isLoading,
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (userPrompt.isNotBlank()) AmberPrimary else SlateSurfaceLight)
+                            .background(if (userPrompt.isNotBlank()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant)
                             .testTag("send_ai_question_button")
                     ) {
                         Icon(

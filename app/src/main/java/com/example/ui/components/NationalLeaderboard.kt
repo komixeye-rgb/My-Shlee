@@ -52,7 +52,7 @@ fun NationalLeaderboardSection(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         // Section Title
@@ -94,16 +94,16 @@ fun NationalLeaderboardSection(
                     onClick = { onFilterChanged(level) },
                     label = { Text(level, style = MaterialTheme.typography.labelSmall) },
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = AmberPrimary,
+                        selectedContainerColor = MaterialTheme.colorScheme.primary,
                         selectedLabelColor = Color.White,
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                         labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     border = FilterChipDefaults.filterChipBorder(
                         enabled = true,
                         selected = isSelected,
-                        borderColor = MaterialTheme.colorScheme.outline,
-                        selectedBorderColor = AmberPrimary
+                        borderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                        selectedBorderColor = MaterialTheme.colorScheme.primary
                     ),
                     modifier = Modifier.testTag("filter_chip_$level")
                 )
@@ -248,8 +248,8 @@ private fun PodiumCard(
 
 @Composable
 private fun CandidateRankRow(candidate: LeaderboardCandidate) {
-    val rowBg = if (candidate.isCurrentUser) AmberPrimary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant
-    val borderStroke = if (candidate.isCurrentUser) androidx.compose.foundation.BorderStroke(1.5.dp, AmberPrimary) else null
+    val rowBg = if (candidate.isCurrentUser) MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+    val borderStroke = if (candidate.isCurrentUser) androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.tertiary) else null
 
     Card(
         colors = CardDefaults.cardColors(containerColor = rowBg),
@@ -302,7 +302,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(if (candidate.isCurrentUser) AmberPrimary else MaterialTheme.colorScheme.outline),
+                        .background(if (candidate.isCurrentUser) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -319,13 +319,13 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = candidate.candidateName,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         if (candidate.isCurrentUser) {
                             Spacer(modifier = Modifier.width(6.dp))
-                            Surface(color = AmberPrimary, shape = RoundedCornerShape(4.dp)) {
+                            Surface(color = MaterialTheme.colorScheme.tertiary, shape = RoundedCornerShape(4.dp)) {
                                 Text(
                                     "YOU",
                                     style = MaterialTheme.typography.labelSmall,
@@ -349,8 +349,8 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = "${candidate.compositePoints} pts",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = AmberLight,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold
                 )
                 Text(

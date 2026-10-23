@@ -7,6 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -22,11 +24,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.R
 import com.example.model.SubscriptionPlan
 import com.example.ui.theme.*
+
+data class SuccessStory(
+    val name: String,
+    val result: String,
+    val quote: String,
+    val emoji: String
+)
 
 @Composable
 fun LandingPricingSection(
@@ -37,12 +47,33 @@ fun LandingPricingSection(
 ) {
     var selectedLevelTab by remember { mutableIntStateOf(0) } // 0 = Primary (PLE), 1 = Secondary (UCE/UACE)
 
+    val successStories = listOf(
+        SuccessStory(
+            "Mubarak S.",
+            "Aggregate 4 PLE 2025",
+            "Shlee's AI tutor explained long division like a game! I went from Agg 12 to Agg 4 in just one term.",
+            "🎒"
+        ),
+        SuccessStory(
+            "Aisha N.",
+            "8 for 8 UCE 2025",
+            "The Subject Radar helped me focus on Chemistry Paper 2 which was my weakest spot. I felt so prepared!",
+            "🎓"
+        ),
+        SuccessStory(
+            "Joel K.",
+            "20 Points UACE 2025",
+            "The Pomodoro timer kept me focused during the long mock season. Shlee is the best prep tool in Uganda.",
+            "⭐"
+        )
+    )
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(SlateSurface)
-            .border(1.dp, SlateBorder, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .padding(16.dp)
             .testTag("landing_pricing_section")
             .animateContentSize()
@@ -65,8 +96,8 @@ fun LandingPricingSection(
                     .fillMaxSize()
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, SlateCanvas.copy(alpha = 0.92f)),
-                            startY = 40f
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)),
+                            startY = 60f
                         )
                     )
             )
@@ -76,7 +107,7 @@ fun LandingPricingSection(
                     .padding(14.dp)
             ) {
                 Surface(
-                    color = AmberPrimary,
+                    color = MaterialTheme.colorScheme.tertiary,
                     shape = RoundedCornerShape(6.dp)
                 ) {
                     Text(
@@ -90,7 +121,7 @@ fun LandingPricingSection(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "Master UNEB Exams with Shlee",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
@@ -105,11 +136,74 @@ fun LandingPricingSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Success Stories Section
+        Text(
+            text = "🌟 Candidate Success Stories",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(
+            contentPadding = PaddingValues(end = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(successStories) { story ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.width(260.dp)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Surface(
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+                                shape = CircleShape,
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(story.emoji, fontSize = 16.sp)
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Column {
+                                Text(
+                                    text = story.name,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = story.result,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "\"${story.quote}\"",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                            fontSize = 11.sp,
+                            lineHeight = 16.sp
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         // Quick Auth / Signup Banner
         Card(
-            colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
             shape = RoundedCornerShape(12.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.4f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -123,27 +217,27 @@ fun LandingPricingSection(
                     Text(
                         text = "Candidate Account & Access",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Join 15,000+ candidates • Start with 7-Day Free Trial",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp
                     )
                 }
 
                 Button(
                     onClick = onAuthClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                     shape = RoundedCornerShape(10.dp),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
                     modifier = Modifier.testTag("landing_signup_button")
                 ) {
                     Icon(Icons.Default.PersonAdd, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("Sign In / Sign Up", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                    Text("Sign In", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -154,13 +248,13 @@ fun LandingPricingSection(
         Text(
             text = "📚 What Shlee Offers by Level",
             style = MaterialTheme.typography.titleSmall,
-            color = TextPrimary,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = "Tailored curriculum breakdowns for Ugandan candidate classes",
             style = MaterialTheme.typography.bodySmall,
-            color = TextSecondary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 11.sp
         )
 
@@ -170,23 +264,23 @@ fun LandingPricingSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SlateCanvas, RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), RoundedCornerShape(10.dp))
                 .padding(4.dp)
         ) {
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(if (selectedLevelTab == 0) AmberPrimary else Color.Transparent)
+                    .background(if (selectedLevelTab == 0) MaterialTheme.colorScheme.primary else Color.Transparent)
                     .clickable { selectedLevelTab = 0 }
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Primary (PLE: P.5-P.7)",
+                    text = "Primary (PLE)",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (selectedLevelTab == 0) Color.White else TextSecondary
+                    color = if (selectedLevelTab == 0) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -194,16 +288,16 @@ fun LandingPricingSection(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(if (selectedLevelTab == 1) AmberPrimary else Color.Transparent)
+                    .background(if (selectedLevelTab == 1) MaterialTheme.colorScheme.primary else Color.Transparent)
                     .clickable { selectedLevelTab = 1 }
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Secondary (UCE & UACE)",
+                    text = "Secondary (UCE/UACE)",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (selectedLevelTab == 1) Color.White else TextSecondary
+                    color = if (selectedLevelTab == 1) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -214,15 +308,15 @@ fun LandingPricingSection(
         if (selectedLevelTab == 0) {
             // Primary (PLE) Card
             Card(
-                colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
                 shape = RoundedCornerShape(12.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Surface(
-                            color = EmeraldLight.copy(alpha = 0.2f),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                             shape = CircleShape,
                             modifier = Modifier.size(28.dp)
                         ) {
@@ -232,36 +326,36 @@ fun LandingPricingSection(
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Primary Leaving Examination (PLE) Hub",
+                            text = "PLE Hub (P.5 - P.7)",
                             style = MaterialTheme.typography.titleSmall,
-                            color = EmeraldLight,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Designed for P.5, P.6, and P.7 candidates aiming for Aggregate 4 (Distinction 1 in all four papers).",
+                        text = "Designed for candidates aiming for Aggregate 4.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     val pleFeatures = listOf(
-                        "Four Core UNEB Subjects: Mathematics, Integrated Science, English & Social Studies (SST/RE)",
-                        "Child-Friendly AI Tutor: Simplified step-by-step explanations with pictorial aids",
-                        "Ugandan Top School Mocks: Kampala Parents, Greenhill, Namagunga Junior, Kitante Primary",
-                        "Parent SMS / WhatsApp Linking: Instant notifications on child's daily quizzes & streak",
-                        "Instant PLE Aggregate Calculator: Automatic grading from Distinction 1 to Pass 8"
+                        "Math, Science, English & SST",
+                        "Child-Friendly AI Tutor with pictures",
+                        "Ugandan Top School Mock Papers",
+                        "Parent SMS / WhatsApp Tracking",
+                        "Instant PLE Aggregate Calculator"
                     )
 
                     pleFeatures.forEach { feat ->
                         Row(modifier = Modifier.padding(vertical = 2.dp), verticalAlignment = Alignment.Top) {
-                            Icon(Icons.Default.Check, contentDescription = null, tint = EmeraldLight, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Default.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text(text = feat, style = MaterialTheme.typography.bodySmall, color = TextPrimary, fontSize = 11.sp)
+                            Text(text = feat, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface, fontSize = 11.sp)
                         }
                     }
                 }
@@ -269,15 +363,15 @@ fun LandingPricingSection(
         } else {
             // Secondary (UCE & UACE) Card
             Card(
-                colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
                 shape = RoundedCornerShape(12.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Surface(
-                            color = AmberLight.copy(alpha = 0.2f),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                             shape = CircleShape,
                             modifier = Modifier.size(28.dp)
                         ) {
@@ -287,36 +381,36 @@ fun LandingPricingSection(
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Secondary Examination (UCE & UACE) Hub",
+                            text = "UCE & UACE Hub",
                             style = MaterialTheme.typography.titleSmall,
-                            color = AmberLight,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Comprehensive revision for O-Level (S.1-S.4 New Curriculum) and A-Level (S.5-S.6 Combinations).",
+                        text = "Comprehensive revision for O-Level & A-Level.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     val uceFeatures = listOf(
-                        "All Sciences & Humanities: Physics, Chemistry, Biology, Mathematics, Geography, History, Literature",
-                        "New Lower Secondary Curriculum: Competency-based scenarios & Activity of Integration breakdown",
-                        "High-Thinking Gemini AI Tutor: Step-by-step solutions for 20-mark UNEB essay & practical apparatus",
-                        "Subject Radar Competency: Interactive radar chart benchmarking against the 80% D1 line",
-                        "National Rivalry Leaderboard: Compete with Budo, Kitende, Gayaza, SMACK, and Namagunga"
+                        "All Sciences & Humanities subjects",
+                        "New Lower Secondary Curriculum (NCDC)",
+                        "High-Thinking Gemini AI Tutor",
+                        "Subject Radar Competency Charts",
+                        "National Ranking & Rivalry Leaderboard"
                     )
 
                     uceFeatures.forEach { feat ->
                         Row(modifier = Modifier.padding(vertical = 2.dp), verticalAlignment = Alignment.Top) {
-                            Icon(Icons.Default.Check, contentDescription = null, tint = AmberLight, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Default.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text(text = feat, style = MaterialTheme.typography.bodySmall, color = TextPrimary, fontSize = 11.sp)
+                            Text(text = feat, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface, fontSize = 11.sp)
                         }
                     }
                 }
@@ -327,28 +421,28 @@ fun LandingPricingSection(
 
         // Transparent: What Stays Free Forever After Free Trial
         Card(
-            colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)),
             shape = RoundedCornerShape(14.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, EmeraldLight.copy(alpha = 0.4f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = EmeraldLight, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "🎁 What We Offer Free Forever (Post-Trial)",
+                        text = "🎁 Free Forever (Post-Trial)",
                         style = MaterialTheme.typography.titleSmall,
-                        color = EmeraldLight,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Even if you do not subscribe after your 7-day free trial, you NEVER lose access to essential revision tools:",
+                    text = "Essential tools you keep forever:",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 11.sp
                 )
 
@@ -359,32 +453,30 @@ fun LandingPricingSection(
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .background(SlateSurface, RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp))
                             .padding(10.dp)
                     ) {
-                        Text("✅ 100% Free Forever", fontWeight = FontWeight.Bold, color = EmeraldLight, fontSize = 11.sp)
+                        Text("✅ 100% Free", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, fontSize = 11.sp)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text("• 1 Daily Quiz per subject", color = TextSecondary, fontSize = 10.sp)
-                        Text("• National Leaderboard viewing", color = TextSecondary, fontSize = 10.sp)
-                        Text("• Pomodoro Study Timer", color = TextSecondary, fontSize = 10.sp)
-                        Text("• UNEB Exam Countdown", color = TextSecondary, fontSize = 10.sp)
-                        Text("• Formula & Definition sheets", color = TextSecondary, fontSize = 10.sp)
+                        Text("• 1 Daily Quiz / subj", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                        Text("• National Rankings", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                        Text("• Pomodoro Timer", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                        Text("• Exam Countdown", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
                     }
 
                     // Premium column
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .background(SlateSurface, RoundedCornerShape(10.dp))
+                            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp))
                             .padding(10.dp)
                     ) {
-                        Text("⭐ Premium Upgrades", fontWeight = FontWeight.Bold, color = AmberLight, fontSize = 11.sp)
+                        Text("⭐ Premium", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.tertiary, fontSize = 11.sp)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text("• Unlimited High-Thinking AI Tutor", color = TextSecondary, fontSize = 10.sp)
-                        Text("• Past Papers & Marking Schemes", color = TextSecondary, fontSize = 10.sp)
-                        Text("• Radar Weak Spot Diagnostics", color = TextSecondary, fontSize = 10.sp)
-                        Text("• Predicted UNEB Mock Papers", color = TextSecondary, fontSize = 10.sp)
-                        Text("• Printable Revision Passports", color = TextSecondary, fontSize = 10.sp)
+                        Text("• Unlimited AI Tutor", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                        Text("• Past Papers & Schemes", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                        Text("• Weak Spot Diagnostics", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                        Text("• Predicted Mock Papers", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
                     }
                 }
             }
@@ -396,13 +488,13 @@ fun LandingPricingSection(
         Text(
             text = "💳 Candidate Subscription Tiers (UGX)",
             style = MaterialTheme.typography.titleSmall,
-            color = TextPrimary,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Affordable pricing for every Ugandan family • Instant Mobile Money Activation",
+            text = "Affordable pricing for every Ugandan family",
             style = MaterialTheme.typography.bodySmall,
-            color = TextSecondary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 11.sp
         )
 
@@ -419,28 +511,28 @@ fun LandingPricingSection(
 
         // Payment Methods Card (MTN & Airtel)
         Card(
-            colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
             shape = RoundedCornerShape(12.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.PhoneAndroid, contentDescription = null, tint = EmeraldLight, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Default.PhoneAndroid, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "📱 Ugandan Mobile Money Accepted",
+                        text = "📱 Ugandan Mobile Money",
                         style = MaterialTheme.typography.titleSmall,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Instant USSD Push prompt directly to your phone. Enter your PIN to activate immediately:",
+                    text = "Instant USSD Push prompt directly to your phone:",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 11.sp
                 )
 
@@ -454,9 +546,8 @@ fun LandingPricingSection(
                         modifier = Modifier.weight(1f).padding(vertical = 4.dp)
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
-                            Text("MTN Mobile Money", fontWeight = FontWeight.Bold, color = Color(0xFFFECA0A), fontSize = 11.sp)
-                            Text("Merchant: 0775551996", color = TextPrimary, fontSize = 10.sp)
-                            Text("Dial *165# for prompt", color = TextSecondary, fontSize = 9.sp)
+                            Text("MTN MoMo", fontWeight = FontWeight.Bold, color = Color(0xFFB8860B), fontSize = 11.sp)
+                            Text("*165# prompt", color = MaterialTheme.colorScheme.onSurface, fontSize = 10.sp)
                         }
                     }
 
@@ -467,9 +558,8 @@ fun LandingPricingSection(
                         modifier = Modifier.weight(1f).padding(vertical = 4.dp)
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
-                            Text("Airtel Money", fontWeight = FontWeight.Bold, color = Color(0xFFEF4444), fontSize = 11.sp)
-                            Text("Merchant: 0704556555", color = TextPrimary, fontSize = 10.sp)
-                            Text("Dial *185# for prompt", color = TextSecondary, fontSize = 9.sp)
+                            Text("Airtel Money", fontWeight = FontWeight.Bold, color = Color(0xFFB91C1C), fontSize = 11.sp)
+                            Text("*185# prompt", color = MaterialTheme.colorScheme.onSurface, fontSize = 10.sp)
                         }
                     }
                 }
@@ -487,12 +577,12 @@ private fun LandingPlanCard(
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = if (plan.isPopular) SlateSurfaceLight else SlateCanvas
+            containerColor = if (plan.isPopular) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
         ),
         shape = RoundedCornerShape(14.dp),
         border = androidx.compose.foundation.BorderStroke(
-            width = if (plan.isPopular) 1.5.dp else 1.dp,
-            color = if (plan.isPopular) AmberPrimary else SlateBorder
+            width = if (plan.isPopular) 2.dp else 1.dp,
+            color = if (plan.isPopular) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -508,17 +598,17 @@ private fun LandingPlanCard(
                     Text(
                         text = plan.name,
                         style = MaterialTheme.typography.titleSmall,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     if (plan.isPopular) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Surface(
-                            color = AmberPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
-                                text = "MOST POPULAR",
+                                text = "POPULAR",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color.White,
                                 fontSize = 8.sp,
@@ -532,13 +622,13 @@ private fun LandingPlanCard(
                     Text(
                         text = plan.priceUgx,
                         style = MaterialTheme.typography.titleMedium,
-                        color = if (isFree) EmeraldLight else AmberLight,
+                        color = if (isFree) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = plan.period,
                         style = MaterialTheme.typography.labelSmall,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 10.sp
                     )
                 }
@@ -554,11 +644,11 @@ private fun LandingPlanCard(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = null,
-                        tint = if (isFree) EmeraldLight else AmberLight,
+                        tint = if (isFree) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.size(13.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = feature, style = MaterialTheme.typography.bodySmall, color = TextSecondary, fontSize = 11.sp)
+                    Text(text = feature, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
                 }
             }
 
@@ -567,15 +657,16 @@ private fun LandingPlanCard(
             Button(
                 onClick = onSelect,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFree) SlateSurfaceLight else AmberPrimary
+                    containerColor = if (isFree) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primary
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = if (isFree) "Start 7-Day Free Trial ➜" else "Subscribe for ${plan.priceUgx} ➜",
+                    text = if (isFree) "Start 7-Day Free Trial" else "Subscribe for ${plan.priceUgx}",
                     style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = if (isFree) MaterialTheme.colorScheme.onSurface else Color.White
                 )
             }
         }

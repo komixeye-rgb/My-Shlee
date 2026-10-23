@@ -58,10 +58,10 @@ fun ProfileShareModal(
     }
 
     Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(20.dp),
-            color = SlateSurface,
-            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.surface,
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -83,29 +83,29 @@ fun ProfileShareModal(
                         Icon(
                             imageVector = Icons.Default.QrCodeScanner,
                             contentDescription = null,
-                            tint = AmberLight,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Student Pass & QR Code",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = TextPrimary,
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                     }
-                    IconButton(
-                        onClick = onDismiss,
-                        modifier = Modifier.testTag("close_qr_modal")
-                    ) {
-                        Icon(Icons.Default.Close, contentDescription = "Close", tint = TextSecondary)
-                    }
+                        IconButton(
+                            onClick = onDismiss,
+                            modifier = Modifier.testTag("close_qr_modal")
+                        ) {
+                            Icon(Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                 }
 
                 Text(
                     text = "Scannable student badge with unique Index & Study Streak",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     fontSize = 11.sp,
                     modifier = Modifier.align(Alignment.Start)
                 )
@@ -118,7 +118,7 @@ fun ProfileShareModal(
                         .size(210.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color.White)
-                        .border(2.dp, AmberPrimary, RoundedCornerShape(16.dp))
+                        .border(2.dp, MaterialTheme.colorScheme.tertiary, RoundedCornerShape(16.dp))
                         .padding(12.dp)
                         .testTag("student_qr_code_image"),
                     contentAlignment = Alignment.Center
@@ -134,8 +134,8 @@ fun ProfileShareModal(
 
                 // Candidate Details Card with Index & Streak
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = SlateSurfaceLight),
-                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(
@@ -155,17 +155,17 @@ fun ProfileShareModal(
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = userProfile.name,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = TextPrimary,
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold
                             )
                             Spacer(modifier = Modifier.width(6.dp))
-                            Icon(Icons.Default.Verified, contentDescription = "Verified", tint = EmeraldLight, modifier = Modifier.size(16.dp))
+                            Icon(Icons.Default.Verified, contentDescription = "Verified", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
                         }
                         Text(
                             text = "${userProfile.school} • ${userProfile.candidateLevel}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center
                         )
 
@@ -175,9 +175,9 @@ fun ProfileShareModal(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            BadgeStatPill("INDEX NO.", userProfile.studentId, AmberLight)
-                            BadgeStatPill("CURRENT STREAK", "🔥 ${userProfile.currentStreak} Days", FlameOrange)
-                            BadgeStatPill("TARGET", userProfile.projectedAggregate, EmeraldLight)
+                            BadgeStatPill("INDEX NO.", userProfile.studentId, MaterialTheme.colorScheme.tertiary)
+                            BadgeStatPill("CURRENT STREAK", "🔥 ${userProfile.currentStreak} Days", MaterialTheme.colorScheme.error)
+                            BadgeStatPill("TARGET", userProfile.projectedAggregate, MaterialTheme.colorScheme.primary)
                         }
                     }
                 }
@@ -188,7 +188,7 @@ fun ProfileShareModal(
                 Text(
                     text = "Scan with any phone camera or barcode app to view verified candidate credentials and streak.",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     fontSize = 10.sp,
                     textAlign = TextAlign.Center
                 )
@@ -204,8 +204,8 @@ fun ProfileShareModal(
                         onClick = {
                             copyToClipboard(context, qrPayload)
                         },
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = AmberLight),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.secondary),
                         modifier = Modifier
                             .weight(1f)
                             .testTag("copy_share_link_button")
@@ -219,8 +219,8 @@ fun ProfileShareModal(
                         onClick = {
                             shareQrCode(context, userProfile, qrPayload)
                         },
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         modifier = Modifier
                             .weight(1f)
                             .testTag("download_share_qr_button")
@@ -238,7 +238,7 @@ fun ProfileShareModal(
 @Composable
 private fun BadgeStatPill(label: String, value: String, valueColor: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = label, style = MaterialTheme.typography.labelSmall, color = TextMuted, fontSize = 9.sp)
+        Text(text = label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontSize = 9.sp)
         Text(text = value, style = MaterialTheme.typography.bodyMedium, color = valueColor, fontWeight = FontWeight.Bold)
     }
 }

@@ -60,8 +60,8 @@ fun AuthModal(
         ) {
             Surface(
                 shape = RoundedCornerShape(24.dp),
-                color = SlateSurface,
-                border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+                color = MaterialTheme.colorScheme.surface,
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -91,14 +91,14 @@ fun AuthModal(
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = if (isLoggedIn) "Student Profile" else if (isSignUp) "Create Candidate Account" else "Candidate Sign In",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = TextPrimary,
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold
                             )
                         }
 
                         IconButton(onClick = onDismiss, modifier = Modifier.testTag("close_auth_modal")) {
-                            Icon(Icons.Default.Close, contentDescription = "Close", tint = TextSecondary)
+                            Icon(Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
@@ -107,14 +107,14 @@ fun AuthModal(
                     if (isLoggedIn) {
                         // Logged in state view
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = SlateCanvas),
-                            shape = RoundedCornerShape(12.dp),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+                            shape = RoundedCornerShape(16.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                                 Surface(
-                                    color = AmberPrimary.copy(alpha = 0.2f),
+                                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
                                     shape = CircleShape,
                                     modifier = Modifier.size(56.dp)
                                 ) {
@@ -125,25 +125,25 @@ fun AuthModal(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = currentStudentName,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = TextPrimary,
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
                                     text = "UNEB Center 2026 • Verified Candidate",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = EmeraldLight
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Surface(
-                                    color = SlateSurface,
-                                    shape = RoundedCornerShape(8.dp),
+                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(12.dp),
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Column(modifier = Modifier.padding(10.dp)) {
-                                        Text("🎁 Free Trial Status: Active", color = EmeraldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                                        Text("• 1 Daily Quiz / Subject: Guaranteed Forever", color = TextSecondary, fontSize = 10.sp)
-                                        Text("• National Leaderboard: Active", color = TextSecondary, fontSize = 10.sp)
+                                        Text("🎁 Free Trial Status: Active", color = MaterialTheme.colorScheme.primary, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                        Text("• 1 Daily Quiz / Subject: Guaranteed Forever", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
+                                        Text("• National Leaderboard: Active", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
                                     }
                                 }
                             }
@@ -170,7 +170,7 @@ fun AuthModal(
                         Text(
                             text = "Select Candidate Education Level:",
                             style = MaterialTheme.typography.labelSmall,
-                            color = TextSecondary,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             modifier = Modifier.align(Alignment.Start)
                         )
                         Spacer(modifier = Modifier.height(6.dp))
@@ -178,7 +178,7 @@ fun AuthModal(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(SlateCanvas, RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
                                 .padding(4.dp)
                         ) {
                             val isPrimary = selectedLevel.startsWith("Primary")
@@ -186,7 +186,7 @@ fun AuthModal(
                                 modifier = Modifier
                                     .weight(1f)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(if (isPrimary) AmberPrimary else Color.Transparent)
+                                    .background(if (isPrimary) MaterialTheme.colorScheme.primary else Color.Transparent)
                                     .clickable { selectedLevel = "Primary (PLE)" }
                                     .padding(vertical = 8.dp),
                                 contentAlignment = Alignment.Center
@@ -195,7 +195,7 @@ fun AuthModal(
                                     text = "🎒 Primary (PLE)",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (isPrimary) Color.White else TextSecondary
+                                    color = if (isPrimary) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
 
@@ -203,7 +203,7 @@ fun AuthModal(
                                 modifier = Modifier
                                     .weight(1f)
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(if (!isPrimary) AmberPrimary else Color.Transparent)
+                                    .background(if (!isPrimary) MaterialTheme.colorScheme.primary else Color.Transparent)
                                     .clickable { selectedLevel = "Secondary (UCE/UACE)" }
                                     .padding(vertical = 8.dp),
                                 contentAlignment = Alignment.Center
@@ -212,7 +212,7 @@ fun AuthModal(
                                     text = "🎓 Secondary (UCE)",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (!isPrimary) Color.White else TextSecondary
+                                    color = if (!isPrimary) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
@@ -226,12 +226,12 @@ fun AuthModal(
                                 onValueChange = { studentNameInput = it },
                                 label = { Text("Candidate Full Name") },
                                 placeholder = { Text("e.g. Kato Ivan") },
-                                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = AmberLight) },
+                                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = AmberPrimary,
-                                    unfocusedBorderColor = SlateBorder,
-                                    focusedTextColor = TextPrimary,
-                                    unfocusedTextColor = TextPrimary
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                                 ),
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
@@ -246,12 +246,12 @@ fun AuthModal(
                                 onValueChange = { schoolNameInput = it },
                                 label = { Text("School Name") },
                                 placeholder = { Text("e.g. King's College Budo / Namagunga") },
-                                leadingIcon = { Icon(Icons.Default.School, contentDescription = null, tint = AmberLight) },
+                                leadingIcon = { Icon(Icons.Default.School, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = AmberPrimary,
-                                    unfocusedBorderColor = SlateBorder,
-                                    focusedTextColor = TextPrimary,
-                                    unfocusedTextColor = TextPrimary
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                                 ),
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
@@ -267,12 +267,12 @@ fun AuthModal(
                             onValueChange = { unebCenterInput = it },
                             label = { Text("UNEB Center / Student Index No.") },
                             placeholder = { Text("e.g. U0041/502 or PLE-2026") },
-                            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null, tint = AmberLight) },
+                            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = AmberPrimary,
-                                unfocusedBorderColor = SlateBorder,
-                                focusedTextColor = TextPrimary,
-                                unfocusedTextColor = TextPrimary
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                             ),
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier
@@ -286,13 +286,13 @@ fun AuthModal(
                             value = passwordInput,
                             onValueChange = { passwordInput = it },
                             label = { Text("Password / PIN") },
-                            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = AmberLight) },
+                            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
                             visualTransformation = PasswordVisualTransformation(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = AmberPrimary,
-                                unfocusedBorderColor = SlateBorder,
-                                focusedTextColor = TextPrimary,
-                                unfocusedTextColor = TextPrimary
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                             ),
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier
@@ -304,9 +304,9 @@ fun AuthModal(
 
                         // Free Guarantee Banner
                         Surface(
-                            color = EmeraldLight.copy(alpha = 0.12f),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, EmeraldLight.copy(alpha = 0.3f)),
-                            shape = RoundedCornerShape(8.dp),
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+                            shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Row(
@@ -318,7 +318,7 @@ fun AuthModal(
                                 Text(
                                     text = "Includes 7-Day Full Trial + 1 Free Quiz per subject forever!",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = EmeraldLight,
+                                    color = MaterialTheme.colorScheme.primary,
                                     fontSize = 10.sp
                                 )
                             }
@@ -337,10 +337,11 @@ fun AuthModal(
                                 ).show()
                                 onDismiss()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(48.dp)
                                 .testTag("submit_auth_button")
                         ) {
                             Text(
@@ -357,7 +358,7 @@ fun AuthModal(
                         ) {
                             Text(
                                 text = if (isSignUp) "Already have an account? Sign In" else "New UNEB Candidate? Create Free Account",
-                                color = AmberLight,
+                                color = MaterialTheme.colorScheme.secondary,
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }

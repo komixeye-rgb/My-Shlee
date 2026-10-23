@@ -6,18 +6,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val SlateColorScheme = lightColorScheme(
-    primary = EduRoyalBlue,
+    primary = EmeraldContainer,
     onPrimary = Color.White,
-    primaryContainer = EduRoyalBlueLight.copy(alpha = 0.12f),
-    onPrimaryContainer = EduRoyalBlue,
-    secondary = EduTealGreen,
+    primaryContainer = EmeraldPrimary,
+    onPrimaryContainer = Color.White,
+    secondary = RoyalIndigo,
     onSecondary = Color.White,
-    secondaryContainer = EduTealGreen.copy(alpha = 0.12f),
-    onSecondaryContainer = EduTealDark,
-    tertiary = EduCoralRose,
+    secondaryContainer = EduRoyalBlueLight.copy(alpha = 0.2f),
+    onSecondaryContainer = RoyalIndigo,
+    tertiary = SunnyAmber,
     onTertiary = Color.White,
-    tertiaryContainer = EduCoralRose.copy(alpha = 0.12f),
-    onTertiaryContainer = EduCoralDark,
+    tertiaryContainer = SunnyAmber.copy(alpha = 0.15f),
+    onTertiaryContainer = SunnyAmber,
     background = SlateCanvas,
     onBackground = SlateTextPrimary,
     surface = SlateSurface,
@@ -26,23 +26,23 @@ private val SlateColorScheme = lightColorScheme(
     onSurfaceVariant = SlateTextSecondary,
     outline = SlateBorder,
     outlineVariant = SlateBorder.copy(alpha = 0.6f),
-    error = EduCoralRose,
+    error = CoralSalmon,
     onError = Color.White
 )
 
 private val DayColorScheme = lightColorScheme(
-    primary = EduRoyalBlueDark, // Deeper blue for higher contrast in sunlight
+    primary = EmeraldPrimary,
     onPrimary = Color.White,
-    primaryContainer = EduRoyalBlue.copy(alpha = 0.12f),
-    onPrimaryContainer = EduRoyalBlueDark,
-    secondary = EduTealDark,
+    primaryContainer = EmeraldContainer.copy(alpha = 0.15f),
+    onPrimaryContainer = EmeraldPrimary,
+    secondary = RoyalIndigo,
     onSecondary = Color.White,
-    secondaryContainer = EduTealLight.copy(alpha = 0.15f),
-    onSecondaryContainer = EduTealDark,
-    tertiary = EduCoralDark,
+    secondaryContainer = RoyalIndigo.copy(alpha = 0.15f),
+    onSecondaryContainer = RoyalIndigo,
+    tertiary = SunnyAmber,
     onTertiary = Color.White,
-    tertiaryContainer = EduCoralRose.copy(alpha = 0.1f),
-    onTertiaryContainer = EduCoralDark,
+    tertiaryContainer = SunnyAmber.copy(alpha = 0.15f),
+    onTertiaryContainer = SunnyAmber,
     background = DayCanvas,
     onBackground = DayTextPrimary,
     surface = DaySurface,
@@ -50,8 +50,8 @@ private val DayColorScheme = lightColorScheme(
     surfaceVariant = DaySurfaceVariant,
     onSurfaceVariant = DayTextSecondary,
     outline = DayBorder,
-    outlineVariant = DayBorder.copy(alpha = 0.8f),
-    error = EduCoralDark,
+    outlineVariant = DayTextMuted,
+    error = CoralSalmon,
     onError = Color.White
 )
 

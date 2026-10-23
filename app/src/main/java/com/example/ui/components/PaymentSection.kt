@@ -34,8 +34,8 @@ fun PaymentSection(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(SlateSurface)
-            .border(1.dp, SlateBorder, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .padding(16.dp)
             .testTag("payment_section")
     ) {
@@ -50,21 +50,21 @@ fun PaymentSection(
                     Icon(
                         imageVector = Icons.Default.Payments,
                         contentDescription = null,
-                        tint = AmberLight,
+                        tint = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.size(22.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Shlee Premium & Payments",
                         style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Text(
                     text = "Unlock Unlimited AI Tutor, Past Papers & Leaderboard Priority via Mobile Money",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -83,18 +83,18 @@ fun PaymentSection(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        HorizontalDivider(color = SlateBorder)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Payment History Header
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.History, contentDescription = null, tint = AmberLight, modifier = Modifier.size(18.dp))
+            Icon(Icons.Default.History, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(18.dp))
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "Transaction History",
                 style = MaterialTheme.typography.titleSmall,
-                color = TextPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -102,7 +102,7 @@ fun PaymentSection(
         Spacer(modifier = Modifier.height(10.dp))
 
         if (transactions.isEmpty()) {
-            Text("No recent payment transactions.", style = MaterialTheme.typography.bodySmall, color = TextMuted)
+            Text("No recent payment transactions.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
         } else {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 transactions.forEach { tx ->
@@ -120,12 +120,12 @@ private fun SubscriptionPlanCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = if (plan.isPopular) SlateSurfaceLight else SlateCanvas
+            containerColor = if (plan.isPopular) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f) else MaterialTheme.colorScheme.background
         ),
         shape = RoundedCornerShape(14.dp),
         border = androidx.compose.foundation.BorderStroke(
             width = if (plan.isPopular) 1.5.dp else 1.dp,
-            color = if (plan.isPopular) AmberPrimary else SlateBorder
+            color = if (plan.isPopular) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -141,13 +141,13 @@ private fun SubscriptionPlanCard(
                     Text(
                         text = plan.name,
                         style = MaterialTheme.typography.titleSmall,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     if (plan.isPopular) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Surface(
-                            color = AmberPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
@@ -165,13 +165,13 @@ private fun SubscriptionPlanCard(
                     Text(
                         text = plan.priceUgx,
                         style = MaterialTheme.typography.titleMedium,
-                        color = AmberLight,
+                        color = MaterialTheme.colorScheme.tertiary,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = plan.period,
                         style = MaterialTheme.typography.labelSmall,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         fontSize = 10.sp
                     )
                 }
@@ -184,9 +184,9 @@ private fun SubscriptionPlanCard(
                     modifier = Modifier.padding(vertical = 2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = EmeraldLight, modifier = Modifier.size(14.dp))
+                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = feature, style = MaterialTheme.typography.bodySmall, color = TextSecondary, fontSize = 11.sp)
+                    Text(text = feature, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
                 }
             }
 
@@ -195,7 +195,7 @@ private fun SubscriptionPlanCard(
             Button(
                 onClick = onSubscribe,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (plan.isPopular) AmberPrimary else SlateSurfaceLight
+                    containerColor = if (plan.isPopular) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -203,7 +203,8 @@ private fun SubscriptionPlanCard(
                 Text(
                     text = "Subscribe via Mobile Money ➜",
                     style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = if (plan.isPopular) Color.White else MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -213,8 +214,9 @@ private fun SubscriptionPlanCard(
 @Composable
 private fun TransactionRow(transaction: PaymentTransaction) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(10.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -228,13 +230,13 @@ private fun TransactionRow(transaction: PaymentTransaction) {
                 Text(
                     text = transaction.planName,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = TextPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "${transaction.paymentMethod} • ${transaction.date}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     fontSize = 10.sp
                 )
             }
@@ -243,17 +245,17 @@ private fun TransactionRow(transaction: PaymentTransaction) {
                 Text(
                     text = transaction.amountUgx,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = AmberLight,
+                    color = MaterialTheme.colorScheme.tertiary,
                     fontWeight = FontWeight.Bold
                 )
                 Surface(
-                    color = EmeraldDistinct.copy(alpha = 0.2f),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                     shape = RoundedCornerShape(4.dp)
                 ) {
                     Text(
                         text = transaction.status,
                         style = MaterialTheme.typography.labelSmall,
-                        color = EmeraldLight,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 9.sp,
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
                     )

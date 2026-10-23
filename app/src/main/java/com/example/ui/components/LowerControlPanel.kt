@@ -57,15 +57,15 @@ fun LowerControlPanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.background)
-                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
                     .padding(horizontal = 10.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Streak & Goal Indicator
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("🔥 ${userProfile.currentStreak}d", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = FlameLight)
+                    Text("🔥 ${userProfile.currentStreak}d", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.error)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Goal: ${userProfile.dailyQuizCompleted}/${userProfile.dailyQuizGoal}",
@@ -85,13 +85,13 @@ fun LowerControlPanel(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
-                            .background(AmberPrimary.copy(alpha = 0.2f))
+                            .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f))
                             .testTag("lower_panel_ai_button")
                     ) {
                         Icon(
                             imageVector = Icons.Default.AutoAwesome,
                             contentDescription = "Ask AI Tutor",
-                            tint = AmberLight,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -99,8 +99,8 @@ fun LowerControlPanel(
                     // Quick Practice FAB Pill
                     Button(
                         onClick = onQuickPracticeClick,
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
                         modifier = Modifier.testTag("lower_panel_quick_practice")
                     ) {
@@ -138,9 +138,9 @@ fun LowerControlPanel(
                         Text("Radar", fontSize = 9.sp, fontWeight = if (activeTab == 0) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = AmberPrimary,
-                        selectedTextColor = AmberPrimary,
-                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        selectedIconColor = MaterialTheme.colorScheme.tertiary,
+                        selectedTextColor = MaterialTheme.colorScheme.tertiary,
+                        indicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
@@ -157,9 +157,9 @@ fun LowerControlPanel(
                         Text("Focus & Goals", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = AmberPrimary,
-                        selectedTextColor = AmberPrimary,
-                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        selectedIconColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                        selectedTextColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                        indicatorColor = (if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary).copy(alpha = 0.12f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
@@ -176,9 +176,9 @@ fun LowerControlPanel(
                         Text("Roadmap", fontSize = 9.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = EmeraldLight,
-                        selectedTextColor = EmeraldLight,
-                        indicatorColor = EmeraldLight.copy(alpha = 0.18f),
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
@@ -195,9 +195,9 @@ fun LowerControlPanel(
                         Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = AmberPrimary,
-                        selectedTextColor = AmberPrimary,
-                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        selectedIconColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                        selectedTextColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                        indicatorColor = (if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary).copy(alpha = 0.12f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
@@ -214,9 +214,9 @@ fun LowerControlPanel(
                         Text("Plans", fontSize = 9.sp, fontWeight = if (activeTab == 4) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = AmberPrimary,
-                        selectedTextColor = AmberPrimary,
-                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        selectedIconColor = MaterialTheme.colorScheme.tertiary,
+                        selectedTextColor = MaterialTheme.colorScheme.tertiary,
+                        indicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),

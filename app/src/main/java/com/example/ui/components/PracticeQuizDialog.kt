@@ -39,8 +39,8 @@ fun PracticeQuizDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = SlateSurface,
-            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
@@ -61,18 +61,18 @@ fun PracticeQuizDialog(
                         Text(
                             text = "${subject.subjectName} Revision Quiz",
                             style = MaterialTheme.typography.titleMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "UNEB Standard Practice • Question ${currentIndex + 1}/${questions.size}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
                     IconButton(onClick = onDismiss, modifier = Modifier.testTag("close_quiz_dialog")) {
-                        Icon(Icons.Default.Close, contentDescription = "Close", tint = TextSecondary)
+                        Icon(Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
@@ -81,13 +81,13 @@ fun PracticeQuizDialog(
                 if (!showResults && currentQuestion != null) {
                     // Question Reference Pill
                     Surface(
-                        color = AmberPrimary.copy(alpha = 0.15f),
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = currentQuestion.pastPaperRef,
                             style = MaterialTheme.typography.labelSmall,
-                            color = AmberLight,
+                            color = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                         )
                     }
@@ -97,7 +97,7 @@ fun PracticeQuizDialog(
                     Text(
                         text = currentQuestion.questionText,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
 
@@ -108,12 +108,12 @@ fun PracticeQuizDialog(
                         val isSelected = selectedAnswers[currentIndex] == optionIndex
                         Card(
                             colors = CardDefaults.cardColors(
-                                containerColor = if (isSelected) AmberPrimary.copy(alpha = 0.25f) else SlateSurfaceLight
+                                containerColor = if (isSelected) MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                             ),
                             shape = RoundedCornerShape(10.dp),
                             border = androidx.compose.foundation.BorderStroke(
                                 width = 1.dp,
-                                color = if (isSelected) AmberPrimary else SlateBorder
+                                color = if (isSelected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -138,13 +138,13 @@ fun PracticeQuizDialog(
                                         newMap[currentIndex] = optionIndex
                                         selectedAnswers = newMap
                                     },
-                                    colors = RadioButtonDefaults.colors(selectedColor = AmberPrimary)
+                                    colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.tertiary)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = optionText,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = TextPrimary
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
@@ -174,11 +174,11 @@ fun PracticeQuizDialog(
                                 }
                             },
                             enabled = selectedAnswers.containsKey(currentIndex),
-                            colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier.testTag("quiz_next_submit_button")
                         ) {
-                            Text(if (currentIndex == questions.size - 1) "Submit Quiz" else "Next Question")
+                            Text(if (currentIndex == questions.size - 1) "Submit Quiz" else "Next Question", color = Color.White)
                         }
                     }
                 } else {
@@ -197,21 +197,21 @@ fun PracticeQuizDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("🎉 Practice Quiz Completed!", style = MaterialTheme.typography.titleMedium, color = TextPrimary, fontWeight = FontWeight.Bold)
+                        Text("🎉 Practice Quiz Completed!", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Score: $correctCount / ${questions.size} (${quizPct.toInt()}%)",
                             style = MaterialTheme.typography.titleLarge,
-                            color = if (quizPct >= 66f) EmeraldLight else FlameOrange,
+                            color = if (quizPct >= 66f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.Bold
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Text(
-                            text = "Your $subject competence score updated to ${updatedScore.toInt()}% on the Radar Chart!",
+                            text = "Your ${subject.subjectName} competence score updated to ${updatedScore.toInt()}% on the Radar Chart!",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp
                         )
 
@@ -222,13 +222,13 @@ fun PracticeQuizDialog(
                                 onQuizCompleted(subject.id, updatedScore)
                                 onDismiss()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .testTag("finish_quiz_button")
                         ) {
-                            Text("Update Radar & Finish ➜", fontWeight = FontWeight.Bold)
+                            Text("Update Radar & Finish ➜", fontWeight = FontWeight.Bold, color = Color.White)
                         }
                     }
                 }

@@ -52,8 +52,8 @@ fun SubjectRadarChartSection(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(SlateSurface)
-            .border(1.dp, SlateBorder, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
             .padding(16.dp)
             .testTag("subject_radar_chart_section")
     ) {
@@ -66,14 +66,14 @@ fun SubjectRadarChartSection(
             Column {
                 Text(
                     text = "Subject Performance Diagnostic",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = TextPrimary,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "UNEB Distinction 1 Baseline (80%) Analysis",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
@@ -83,11 +83,11 @@ fun SubjectRadarChartSection(
                     onClick = { isRadarChartVisible = !isRadarChartVisible },
                     shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = if (isRadarChartVisible) AmberLight else TextSecondary
+                        contentColor = if (isRadarChartVisible) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     border = androidx.compose.foundation.BorderStroke(
                         width = 1.dp,
-                        color = if (isRadarChartVisible) AmberPrimary else SlateBorder
+                        color = if (isRadarChartVisible) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline
                     ),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
                     modifier = Modifier.testTag("toggle_radar_visibility_button")
@@ -138,10 +138,10 @@ fun SubjectRadarChartSection(
                             modifier = Modifier
                                 .size(12.dp)
                                 .clip(CircleShape)
-                                .background(AmberPrimary)
+                                .background(MaterialTheme.colorScheme.tertiary)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Your Competence", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
+                        Text("Your Competence", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
 
                     Spacer(modifier = Modifier.width(20.dp))
@@ -150,14 +150,14 @@ fun SubjectRadarChartSection(
                         Box(
                             modifier = Modifier
                                 .size(12.dp)
-                                .border(1.5.dp, ShuleeBlueLight, CircleShape)
+                                .border(1.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("UNEB D1 Target (80%)", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
+                        Text("UNEB D1 Target (80%)", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = SlateBorder)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
             }
         }
 
@@ -166,21 +166,21 @@ fun SubjectRadarChartSection(
         // Focus Areas Header & List
         Text(
             text = "Revision Focus Radar (<65%)",
-            style = MaterialTheme.typography.titleSmall,
-            color = TextPrimary,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = "Subjects requiring urgent attention to achieve distinction aggregate",
             style = MaterialTheme.typography.bodySmall,
-            color = TextMuted
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         if (focusSubjects.isEmpty()) {
             Card(
-                colors = CardDefaults.cardColors(containerColor = EmeraldDistinct.copy(alpha = 0.1f)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -193,7 +193,7 @@ fun SubjectRadarChartSection(
                     Text(
                         text = "Outstanding! All subjects are above the 65% benchmark line.",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = EmeraldLight
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -221,6 +221,14 @@ private fun RadarChartCanvas(
     if (count == 0) return
 
     val angleStep = (2 * Math.PI / count).toFloat()
+
+    val secondaryColor = MaterialTheme.colorScheme.secondary
+    val tertiaryColor = MaterialTheme.colorScheme.tertiary
+    val errorColor = MaterialTheme.colorScheme.error
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val textColor = MaterialTheme.colorScheme.onSurface
+
+    val outlineColor = MaterialTheme.colorScheme.outline
 
     Canvas(
         modifier = Modifier
@@ -253,6 +261,7 @@ private fun RadarChartCanvas(
         val radius = (minOf(size.width, size.height) / 2f) * 0.70f
 
         val gridLevels = listOf(0.2f, 0.4f, 0.6f, 0.8f, 1.0f)
+        val outlineColorCapt = outlineColor // outlineColor is already in scope from the outer function but let's be safe
 
         gridLevels.forEach { level ->
             val gridPath = Path()
@@ -267,7 +276,7 @@ private fun RadarChartCanvas(
 
             drawPath(
                 path = gridPath,
-                color = Color(0xFFCBD5E1).copy(alpha = if (level == 0.8f) 0.9f else 0.6f),
+                color = outlineColorCapt.copy(alpha = if (level == 0.8f) 0.9f else 0.4f),
                 style = Stroke(
                     width = if (level == 0.8f) 1.5f else 1f,
                     pathEffect = if (level == 0.8f) PathEffect.dashPathEffect(floatArrayOf(10f, 6f)) else null
@@ -280,7 +289,7 @@ private fun RadarChartCanvas(
             val endX = centerX + radius * cos(angle)
             val endY = centerY + radius * sin(angle)
             drawLine(
-                color = Color(0xFFCBD5E1).copy(alpha = 0.7f),
+                color = outlineColorCapt.copy(alpha = 0.5f),
                 start = Offset(centerX, centerY),
                 end = Offset(endX, endY),
                 strokeWidth = 1f
@@ -299,11 +308,11 @@ private fun RadarChartCanvas(
 
         drawPath(
             path = benchmarkPath,
-            color = ShuleeBlueLight.copy(alpha = 0.15f)
+            color = secondaryColor.copy(alpha = 0.15f)
         )
         drawPath(
             path = benchmarkPath,
-            color = ShuleeBlueLight.copy(alpha = 0.8f),
+            color = secondaryColor.copy(alpha = 0.8f),
             style = Stroke(width = 2f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(12f, 6f)))
         )
 
@@ -325,11 +334,11 @@ private fun RadarChartCanvas(
 
         drawPath(
             path = studentPath,
-            color = AmberPrimary.copy(alpha = 0.30f)
+            color = tertiaryColor.copy(alpha = 0.30f)
         )
         drawPath(
             path = studentPath,
-            color = AmberPrimary,
+            color = tertiaryColor,
             style = Stroke(width = 3f)
         )
 
@@ -341,7 +350,7 @@ private fun RadarChartCanvas(
             val isWeak = subject.needsRevision
 
             drawCircle(
-                color = if (isWeak) FlameOrange else EmeraldLight,
+                color = if (isWeak) errorColor else primaryColor,
                 radius = if (isSelected) 8.dp.toPx() else 5.dp.toPx(),
                 center = pt
             )
@@ -356,7 +365,21 @@ private fun RadarChartCanvas(
             val ly = centerY + labelR * sin(angle)
 
             val paint = android.graphics.Paint().apply {
-                color = if (isWeak) android.graphics.Color.parseColor("#E11D48") else android.graphics.Color.parseColor("#1E293B")
+                color = if (isWeak) {
+                    android.graphics.Color.argb(
+                        (errorColor.alpha * 255).toInt(),
+                        (errorColor.red * 255).toInt(),
+                        (errorColor.green * 255).toInt(),
+                        (errorColor.blue * 255).toInt()
+                    )
+                } else {
+                    android.graphics.Color.argb(
+                        (textColor.alpha * 255).toInt(),
+                        (textColor.red * 255).toInt(),
+                        (textColor.green * 255).toInt(),
+                        (textColor.blue * 255).toInt()
+                    )
+                }
                 textSize = 12.sp.toPx()
                 textAlign = when {
                     cos(angle) > 0.2f -> android.graphics.Paint.Align.LEFT
@@ -384,8 +407,8 @@ private fun FocusSubjectCard(
     onAskAi: () -> Unit
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = SlateSurfaceLight),
-        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .testTag("focus_subject_card_${subject.id}")
@@ -400,26 +423,26 @@ private fun FocusSubjectCard(
                     Icon(
                         imageVector = Icons.Default.Warning,
                         contentDescription = "Needs Revision",
-                        tint = FlameOrange,
+                        tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = subject.subjectName,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
                 Surface(
-                    color = FlameOrange.copy(alpha = 0.2f),
-                    shape = RoundedCornerShape(6.dp)
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
                         text = "${subject.scorePercentage.toInt()}% / 80% D1 Target",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = FlameLight,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
@@ -431,7 +454,7 @@ private fun FocusSubjectCard(
             Text(
                 text = "Diagnostic: ${subject.diagnosticTag}",
                 style = MaterialTheme.typography.bodySmall,
-                color = TextSecondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -443,7 +466,7 @@ private fun FocusSubjectCard(
                 OutlinedButton(
                     onClick = onAskAi,
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = AmberLight),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.secondary),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                     modifier = Modifier.testTag("ask_ai_button_${subject.id}")
                 ) {
@@ -461,7 +484,7 @@ private fun FocusSubjectCard(
                 Button(
                     onClick = onPractice,
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
                     modifier = Modifier.testTag("practice_now_button_${subject.id}")
                 ) {

@@ -86,9 +86,9 @@ fun NotificationSettingsCard(
     }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = SlateSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(20.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = modifier
             .fillMaxWidth()
             .testTag("daily_study_goals_section")
@@ -105,32 +105,32 @@ fun NotificationSettingsCard(
                         Icon(
                             imageVector = Icons.Default.TaskAlt,
                             contentDescription = null,
-                            tint = AmberLight,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(22.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Daily Study Goals",
                             style = MaterialTheme.typography.titleMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                     }
                     Text(
                         text = "Track and complete your daily UNEB revision tasks",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 Surface(
-                    color = FlameOrange.copy(alpha = 0.15f),
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
                         text = "🔥 ${userProfile.currentStreak}d Streak",
                         style = MaterialTheme.typography.labelSmall,
-                        color = FlameLight,
+                        color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
@@ -141,7 +141,7 @@ fun NotificationSettingsCard(
 
             // Prominent Circular Progress Indicator & Stats Summary
             Card(
-                colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -160,22 +160,22 @@ fun NotificationSettingsCard(
                         CircularProgressIndicator(
                             progress = { animatedProgress },
                             modifier = Modifier.fillMaxSize(),
-                            color = if (animatedProgress >= 1f) EmeraldLight else AmberPrimary,
+                            color = if (animatedProgress >= 1f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
                             strokeWidth = 9.dp,
-                            trackColor = SlateSurfaceLight
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant
                         )
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "${(animatedProgress * 100).toInt()}%",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = if (animatedProgress >= 1f) EmeraldLight else AmberLight,
+                                color = if (animatedProgress >= 1f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "$completedCount of $totalCount Done",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = TextMuted,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 fontSize = 10.sp
                             )
                         }
@@ -185,26 +185,26 @@ fun NotificationSettingsCard(
                         Text(
                             text = if (animatedProgress >= 1f) "🎉 Daily Target Reached!" else "Keep Going Candidate!",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = if (animatedProgress >= 1f) EmeraldLight else TextPrimary,
+                            color = if (animatedProgress >= 1f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "${totalCount - completedCount} tasks remaining today",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 11.sp
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Surface(
-                            color = AmberPrimary.copy(alpha = 0.15f),
+                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
                                 text = "Target: UNEB Aggregate 8 D1",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AmberLight,
+                                color = MaterialTheme.colorScheme.tertiary,
                                 fontSize = 10.sp,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
@@ -219,7 +219,7 @@ fun NotificationSettingsCard(
             Text(
                 text = "Today's Checklist",
                 style = MaterialTheme.typography.titleSmall,
-                color = TextPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
 
@@ -229,12 +229,12 @@ fun NotificationSettingsCard(
                 dailyTasks.forEachIndexed { index, task ->
                     Card(
                         colors = CardDefaults.cardColors(
-                            containerColor = if (task.isCompleted) SlateSurfaceLight.copy(alpha = 0.6f) else SlateSurfaceLight
+                            containerColor = if (task.isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
                         ),
                         shape = RoundedCornerShape(12.dp),
                         border = androidx.compose.foundation.BorderStroke(
                             width = 1.dp,
-                            color = if (task.isCompleted) EmeraldDistinct.copy(alpha = 0.5f) else SlateBorder
+                            color = if (task.isCompleted) MaterialTheme.colorScheme.primary.copy(alpha = 0.5f) else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -254,7 +254,7 @@ fun NotificationSettingsCard(
                             Icon(
                                 imageVector = if (task.isCompleted) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
                                 contentDescription = null,
-                                tint = if (task.isCompleted) EmeraldLight else TextMuted,
+                                tint = if (task.isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                                 modifier = Modifier.size(20.dp)
                             )
 
@@ -263,19 +263,19 @@ fun NotificationSettingsCard(
                             Text(
                                 text = task.title,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = if (task.isCompleted) TextMuted else TextPrimary,
+                                color = if (task.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface,
                                 textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None,
                                 modifier = Modifier.weight(1f)
                             )
 
                             Surface(
-                                color = SlateCanvas,
+                                color = MaterialTheme.colorScheme.background,
                                 shape = RoundedCornerShape(6.dp)
                             ) {
                                 Text(
                                     text = task.subjectTag,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = TextSecondary,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontSize = 9.sp,
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                 )
@@ -305,13 +305,13 @@ fun NotificationSettingsCard(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(AmberPrimary.copy(alpha = 0.15f)),
+                            .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.NotificationsActive,
                             contentDescription = null,
-                            tint = AmberLight,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -320,13 +320,13 @@ fun NotificationSettingsCard(
                         Text(
                             text = "Daily Revision Alarm",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "Remind me if daily goal is incomplete",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextMuted,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 11.sp
                         )
                     }
@@ -343,9 +343,9 @@ fun NotificationSettingsCard(
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
-                        checkedTrackColor = AmberPrimary,
-                        uncheckedThumbColor = TextSecondary,
-                        uncheckedTrackColor = SlateSurfaceLight
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
                     modifier = Modifier.testTag("notification_toggle_switch")
                 )
@@ -357,7 +357,7 @@ fun NotificationSettingsCard(
                     Text(
                         text = "Preferred Reminder Time",
                         style = MaterialTheme.typography.labelSmall,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -372,12 +372,12 @@ fun NotificationSettingsCard(
                                 onClick = { onReminderTimeChanged(timeStr) },
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.outlinedButtonColors(
-                                    containerColor = if (isSelected) AmberPrimary.copy(alpha = 0.2f) else SlateSurfaceLight,
-                                    contentColor = if (isSelected) AmberLight else TextSecondary
+                                    containerColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                 ),
                                 border = androidx.compose.foundation.BorderStroke(
                                     width = 1.dp,
-                                    color = if (isSelected) AmberPrimary else SlateBorder
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                                 ),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                                 modifier = Modifier
@@ -402,18 +402,18 @@ fun NotificationSettingsCard(
                             Toast.makeText(context, "🚀 Test Notification dispatched to status bar!", Toast.LENGTH_SHORT).show()
                         },
                         shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = SlateSurfaceLight),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.5f)),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("test_notification_button")
                     ) {
-                        Icon(Icons.Default.Alarm, contentDescription = null, tint = AmberLight, modifier = Modifier.size(18.dp))
+                        Icon(Icons.Default.Alarm, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Send Test System Notification",
                             style = MaterialTheme.typography.labelMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                     }

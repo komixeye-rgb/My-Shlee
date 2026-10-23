@@ -115,7 +115,7 @@ fun StudentDashboardScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = "Shlee Dashboard",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.headlineSmall,
                             color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
                         )
@@ -139,8 +139,8 @@ fun StudentDashboardScreen(
 
                         Button(
                             onClick = { showShareModal = true },
-                            colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
-                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                            shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
                             modifier = Modifier.testTag("share_profile_header_button")
                         ) {
@@ -152,14 +152,14 @@ fun StudentDashboardScreen(
                         // Signup / Login Control Button
                         OutlinedButton(
                             onClick = { showAuthModal = true },
-                            shape = RoundedCornerShape(10.dp),
+                            shape = RoundedCornerShape(8.dp),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = if (isLoggedIn) MaterialTheme.colorScheme.surfaceVariant else AmberPrimary.copy(alpha = 0.15f),
                                 contentColor = if (isLoggedIn) EmeraldLight else AmberLight
                             ),
                             border = androidx.compose.foundation.BorderStroke(
                                 width = 1.dp,
-                                color = if (isLoggedIn) EmeraldDistinct else AmberPrimary
+                                color = if (isLoggedIn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                             ),
                             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
                             modifier = Modifier.testTag("auth_login_header_button")
@@ -225,20 +225,20 @@ fun StudentDashboardScreen(
             ScrollableTabRow(
                 selectedTabIndex = activeTab,
                 containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = AmberPrimary,
+                contentColor = MaterialTheme.colorScheme.secondary,
                 edgePadding = 0.dp,
                 indicator = { tabPositions ->
                     if (activeTab < tabPositions.size) {
                         TabRowDefaults.SecondaryIndicator(
                             modifier = Modifier.tabIndicatorOffset(tabPositions[activeTab]),
                             height = 3.dp,
-                            color = AmberPrimary
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
                 },
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
             ) {
                 Tab(
                     selected = activeTab == 0,
@@ -340,8 +340,8 @@ fun StudentDashboardScreen(
                             // Quick Focus Session Launch Bar
                             Card(
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                                shape = RoundedCornerShape(12.dp),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.35f)),
+                                shape = RoundedCornerShape(16.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable { activeTab = 1 }
@@ -373,7 +373,7 @@ fun StudentDashboardScreen(
                                         }
                                     }
                                     Surface(
-                                        color = AmberPrimary,
+                                        color = MaterialTheme.colorScheme.primary,
                                         shape = RoundedCornerShape(8.dp)
                                     ) {
                                         Text(
@@ -546,7 +546,7 @@ private fun WelcomeHeaderCard(
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(16.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
@@ -573,16 +573,16 @@ private fun WelcomeHeaderCard(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Candidate ${userProfile.name}",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.headlineSmall,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Surface(color = EmeraldDistinct.copy(alpha = 0.2f), shape = RoundedCornerShape(6.dp)) {
+                        Surface(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), shape = RoundedCornerShape(8.dp)) {
                             Text(
                                 text = userProfile.projectedAggregate,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = EmeraldLight,
+                                color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
@@ -601,18 +601,18 @@ private fun WelcomeHeaderCard(
                         Spacer(modifier = Modifier.width(8.dp))
                         Surface(
                             onClick = onShareClick,
-                            color = AmberPrimary.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(6.dp),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.4f)),
+                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(8.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f)),
                             modifier = Modifier.testTag("profile_view_qr_badge_button")
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(Icons.Default.QrCode, contentDescription = "View QR", tint = AmberLight, modifier = Modifier.size(12.dp))
+                                Icon(Icons.Default.QrCode, contentDescription = "View QR", tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(12.dp))
                                 Spacer(modifier = Modifier.width(3.dp))
-                                Text("QR Pass", fontSize = 10.sp, color = AmberLight, fontWeight = FontWeight.Bold)
+                                Text("QR Pass", fontSize = 10.sp, color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -621,9 +621,9 @@ private fun WelcomeHeaderCard(
                 // Streak Pill (tap to view QR badge)
                 Surface(
                     onClick = onShareClick,
-                    color = FlameOrange.copy(alpha = 0.18f),
+                    color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
                     shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, FlameOrange.copy(alpha = 0.5f)),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.4f)),
                     modifier = Modifier.testTag("student_profile_streak_pill")
                 ) {
                     Row(
@@ -635,11 +635,11 @@ private fun WelcomeHeaderCard(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "${userProfile.currentStreak} Days",
-                                style = MaterialTheme.typography.titleSmall,
-                                color = FlameLight,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.error,
                                 fontWeight = FontWeight.Bold
                             )
-                            Text("Streak", fontSize = 9.sp, color = TextSecondary)
+                            Text("Streak", fontSize = 9.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -651,16 +651,16 @@ private fun WelcomeHeaderCard(
             Surface(
                 onClick = onRefreshSupabase,
                 color = when (isSupabaseConnected) {
-                    true -> EmeraldDistinct.copy(alpha = 0.15f)
-                    false -> FlameOrange.copy(alpha = 0.15f)
+                    true -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                    false -> MaterialTheme.colorScheme.error.copy(alpha = 0.15f)
                     else -> MaterialTheme.colorScheme.surfaceVariant
                 },
                 shape = RoundedCornerShape(8.dp),
                 border = androidx.compose.foundation.BorderStroke(
                     1.dp,
                     when (isSupabaseConnected) {
-                        true -> EmeraldLight.copy(alpha = 0.35f)
-                        false -> FlameOrange.copy(alpha = 0.35f)
+                        true -> MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
+                        false -> MaterialTheme.colorScheme.error.copy(alpha = 0.35f)
                         else -> MaterialTheme.colorScheme.outline
                     }
                 ),
@@ -685,8 +685,8 @@ private fun WelcomeHeaderCard(
                             },
                             contentDescription = "Supabase Status",
                             tint = when (isSupabaseConnected) {
-                                true -> EmeraldLight
-                                false -> FlameLight
+                                true -> MaterialTheme.colorScheme.primary
+                                false -> MaterialTheme.colorScheme.error
                                 else -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             modifier = Modifier.size(13.dp)
@@ -697,8 +697,8 @@ private fun WelcomeHeaderCard(
                         text = if (isSyncing) "Syncing with Supabase..." else syncStatusMessage,
                         style = MaterialTheme.typography.labelSmall,
                         color = when (isSupabaseConnected) {
-                            true -> EmeraldLight
-                            false -> FlameLight
+                            true -> MaterialTheme.colorScheme.primary
+                            false -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.onSurfaceVariant
                         },
                         fontSize = 10.sp,

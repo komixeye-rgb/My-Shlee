@@ -43,8 +43,8 @@ fun PaymentCheckoutDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(24.dp),
-            color = SlateSurface,
-            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+            color = MaterialTheme.colorScheme.surface,
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
@@ -67,30 +67,30 @@ fun PaymentCheckoutDialog(
                             modifier = Modifier
                                 .size(38.dp)
                                 .clip(CircleShape)
-                                .background(AmberPrimary.copy(alpha = 0.2f)),
+                                .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(Icons.Default.Verified, contentDescription = null, tint = AmberLight)
+                            Icon(Icons.Default.Verified, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary)
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
                                 text = "SHLEE Secure Checkout",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = TextPrimary,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "Instant UNEB Premium Activation",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = TextSecondary,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 11.sp
                             )
                         }
                     }
 
                     IconButton(onClick = onDismiss, modifier = Modifier.testTag("close_checkout_dialog")) {
-                        Icon(Icons.Default.Close, contentDescription = "Close", tint = TextSecondary)
+                        Icon(Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
@@ -100,20 +100,20 @@ fun PaymentCheckoutDialog(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = "Success",
-                        tint = EmeraldLight,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(64.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = "Payment Successful!",
                         style = MaterialTheme.typography.titleLarge,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "You are now subscribed to ${plan.name} (${plan.priceUgx}). Full access unlocked!",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(20.dp))
@@ -122,7 +122,7 @@ fun PaymentCheckoutDialog(
                             onPaymentSuccess(plan)
                             onDismiss()
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = EmeraldLight),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -131,24 +131,24 @@ fun PaymentCheckoutDialog(
                 } else {
                     // Plan Summary Card
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                         shape = RoundedCornerShape(14.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.4f)),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary.copy(alpha = 0.4f)),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(14.dp)) {
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text(text = plan.name, style = MaterialTheme.typography.titleSmall, color = TextPrimary, fontWeight = FontWeight.Bold)
-                                Text(text = plan.priceUgx, style = MaterialTheme.typography.titleSmall, color = AmberLight, fontWeight = FontWeight.Bold)
+                                Text(text = plan.name, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
+                                Text(text = plan.priceUgx, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold)
                             }
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "Billing Period: ${plan.period}", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                            Text(text = "Billing Period: ${plan.period}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(text = "Select Mobile Money Provider", style = MaterialTheme.typography.labelMedium, color = TextSecondary, modifier = Modifier.align(Alignment.Start))
+                    Text(text = "Select Mobile Money Provider", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.align(Alignment.Start))
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(
@@ -168,10 +168,10 @@ fun PaymentCheckoutDialog(
                                 },
                                 shape = RoundedCornerShape(10.dp),
                                 colors = ButtonDefaults.outlinedButtonColors(
-                                    containerColor = if (isSelected) AmberPrimary.copy(alpha = 0.2f) else SlateSurfaceLight,
-                                    contentColor = if (isSelected) AmberLight else TextSecondary
+                                    containerColor = if (isSelected) MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = if (isSelected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant
                                 ),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, if (isSelected) AmberPrimary else SlateBorder),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline),
                                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -184,7 +184,7 @@ fun PaymentCheckoutDialog(
 
                     // Merchant Number Instructions Box
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = SlateSurfaceLight),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -195,20 +195,20 @@ fun PaymentCheckoutDialog(
                             Text(
                                 text = "Merchant: $merchantName",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = AmberLight,
+                                color = MaterialTheme.colorScheme.tertiary,
                                 fontWeight = FontWeight.Bold
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = "Send ${plan.priceUgx} to: $merchantNum (SHLEE Education)",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = TextPrimary,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = if (selectedProvider.contains("MTN")) "Dial *165# or use MTN Momo App" else if (selectedProvider.contains("Airtel")) "Dial *185# or use Airtel Money App" else "Enter card details below",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = TextMuted,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 fontSize = 10.sp
                             )
                         }
@@ -220,12 +220,12 @@ fun PaymentCheckoutDialog(
                         value = phoneNumber,
                         onValueChange = { phoneNumber = it },
                         label = { Text("Your Phone / Account Number") },
-                        leadingIcon = { Icon(Icons.Default.PhoneAndroid, contentDescription = null, tint = AmberLight) },
+                        leadingIcon = { Icon(Icons.Default.PhoneAndroid, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary) },
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = AmberPrimary,
-                            unfocusedBorderColor = SlateBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -243,7 +243,7 @@ fun PaymentCheckoutDialog(
                             }, 1800)
                         },
                         enabled = !isProcessing,
-                        colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {

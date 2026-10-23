@@ -42,8 +42,8 @@ fun SubjectMasterySection(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(SlateSurface)
-            .border(1.dp, SlateBorder, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
             .padding(16.dp)
             .testTag("subject_mastery_section")
     ) {
@@ -58,21 +58,21 @@ fun SubjectMasterySection(
                     Icon(
                         imageVector = Icons.Default.BarChart,
                         contentDescription = null,
-                        tint = AmberLight,
+                        tint = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Subject Mastery & Mock Exam Diagnostics",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Text(
                     text = "Official UNEB Grading Scale (D1 to F9) based on Mock Exam Results",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -95,7 +95,7 @@ fun SubjectMasterySection(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        HorizontalDivider(color = SlateBorder)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -116,12 +116,12 @@ private fun SubjectProficiencyRow(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) SlateSurfaceLight else SlateSurface
+            containerColor = if (isSelected) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
         ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         border = androidx.compose.foundation.BorderStroke(
             width = 1.dp,
-            color = if (isSelected) AmberPrimary else SlateBorder
+            color = if (isSelected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -138,8 +138,8 @@ private fun SubjectProficiencyRow(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = subject.subjectName,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = TextPrimary,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -159,14 +159,14 @@ private fun SubjectProficiencyRow(
                     Text(
                         text = "UNEB Grade: ${subject.unebGrade}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         fontSize = 11.sp
                     )
                 }
 
                 Text(
                     text = "${subject.scorePercentage.toInt()}%",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = subject.masteryColor,
                     fontWeight = FontWeight.Bold
                 )
@@ -180,7 +180,7 @@ private fun SubjectProficiencyRow(
                     .fillMaxWidth()
                     .height(10.dp)
                     .clip(CircleShape)
-                    .background(SlateSurfaceLight)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
             ) {
                 // Progress Fill
                 val progressFraction = (subject.scorePercentage / 100f).coerceIn(0f, 1f)
@@ -196,11 +196,22 @@ private fun SubjectProficiencyRow(
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .width(2.dp)
-                        .align(Alignment.CenterStart)
-                        .offset(x = 240.dp) // Visual marker offset
-                        .background(ShuleeBlueLight)
-                )
+                        .fillMaxWidth(0.8f)
+                        .border(
+                            androidx.compose.foundation.BorderStroke(
+                                0.dp,
+                                Color.Transparent
+                            )
+                        )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(2.dp)
+                            .align(Alignment.CenterEnd)
+                            .background(MaterialTheme.colorScheme.secondary)
+                    )
+                }
             }
         }
     }
@@ -211,8 +222,8 @@ private fun MockExamTrendChartCard(subject: SubjectScore) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(SlateCanvas)
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.background)
             .padding(14.dp)
     ) {
         Row(
@@ -224,14 +235,14 @@ private fun MockExamTrendChartCard(subject: SubjectScore) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.TrendingUp,
                     contentDescription = null,
-                    tint = AmberLight,
+                    tint = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "${subject.subjectName} Mock Exam Progression",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = TextPrimary,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -239,7 +250,7 @@ private fun MockExamTrendChartCard(subject: SubjectScore) {
             Text(
                 text = "Target: 80% D1",
                 style = MaterialTheme.typography.labelSmall,
-                color = ShuleeBlueLight,
+                color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -247,6 +258,7 @@ private fun MockExamTrendChartCard(subject: SubjectScore) {
         Spacer(modifier = Modifier.height(12.dp))
 
         // Canvas Line Chart for Mock 1, Mock 2, Mock 3
+        val secondaryColor = MaterialTheme.colorScheme.secondary
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -259,7 +271,7 @@ private fun MockExamTrendChartCard(subject: SubjectScore) {
                 // Draw horizontal benchmark line (80%)
                 val benchmarkY = height * (1f - 0.80f)
                 drawLine(
-                    color = ShuleeBlueLight.copy(alpha = 0.6f),
+                    color = secondaryColor.copy(alpha = 0.6f),
                     start = Offset(0f, benchmarkY),
                     end = Offset(width, benchmarkY),
                     strokeWidth = 2f,
@@ -299,9 +311,9 @@ private fun MockExamTrendChartCard(subject: SubjectScore) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Mock 1 (${subject.mockHistory.getOrElse(0) { 0f }.toInt()}%)", style = MaterialTheme.typography.labelSmall, color = TextMuted)
-            Text("Mock 2 (${subject.mockHistory.getOrElse(1) { 0f }.toInt()}%)", style = MaterialTheme.typography.labelSmall, color = TextMuted)
-            Text("Mock 3 (${subject.mockHistory.getOrElse(2) { 0f }.toInt()}%)", style = MaterialTheme.typography.labelSmall, color = TextPrimary, fontWeight = FontWeight.Bold)
+            Text("Mock 1 (${subject.mockHistory.getOrElse(0) { 0f }.toInt()}%)", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+            Text("Mock 2 (${subject.mockHistory.getOrElse(1) { 0f }.toInt()}%)", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+            Text("Mock 3 (${subject.mockHistory.getOrElse(2) { 0f }.toInt()}%)", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
         }
     }
 }

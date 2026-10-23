@@ -134,7 +134,7 @@ fun StudyRoadmapSection(
                         Text(
                             text = levelOption.split(" ").first(),
                             style = MaterialTheme.typography.labelMedium,
-                            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                         )
                     }
