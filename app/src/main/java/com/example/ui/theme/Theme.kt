@@ -1,30 +1,32 @@
 package com.example.ui.theme
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val ShuleeColorScheme = darkColorScheme(
-    primary = EmeraldLight,
+private val EducationColorScheme = lightColorScheme(
+    primary = EduRoyalBlue,
     onPrimary = Color.White,
-    primaryContainer = EmeraldPrimary,
-    onPrimaryContainer = Color.White,
-    secondary = RoyalIndigo,
+    primaryContainer = EduRoyalBlueLight.copy(alpha = 0.12f),
+    onPrimaryContainer = EduRoyalBlue,
+    secondary = EduTealGreen,
     onSecondary = Color.White,
-    secondaryContainer = RoyalIndigoContainer,
-    onSecondaryContainer = Color.White,
-    tertiary = SunnyAmber,
+    secondaryContainer = EduTealGreen.copy(alpha = 0.12f),
+    onSecondaryContainer = EduTealDark,
+    tertiary = EduCoralRose,
     onTertiary = Color.White,
-    tertiaryContainer = SunnyAmberContainer,
-    background = SlateCanvas,
-    onBackground = TextPrimary,
-    surface = SlateSurface,
-    onSurface = TextPrimary,
-    surfaceVariant = SlateSurfaceLight,
-    onSurfaceVariant = TextSecondary,
-    outline = SlateBorder,
-    error = CoralSalmon,
+    tertiaryContainer = EduCoralRose.copy(alpha = 0.12f),
+    onTertiaryContainer = EduCoralDark,
+    background = EduCanvas,
+    onBackground = EduTextPrimary,
+    surface = EduSurface,
+    onSurface = EduTextPrimary,
+    surfaceVariant = EduSurfaceVariant,
+    onSurfaceVariant = EduTextSecondary,
+    outline = EduBorder,
+    outlineVariant = EduBorder.copy(alpha = 0.6f),
+    error = EduCoralRose,
     onError = Color.White
 )
 
@@ -33,7 +35,7 @@ fun SHULEETheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = ShuleeColorScheme,
+        colorScheme = EducationColorScheme,
         typography = Typography,
         content = content
     )

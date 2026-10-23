@@ -108,3 +108,23 @@ data class QuizQuestion(
     val explanation: String,
     val pastPaperRef: String
 )
+
+data class ExamMilestone(
+    val id: String,
+    val title: String,
+    val dateLabel: String,
+    val status: MilestoneStatus,
+    val daysRemaining: Int?,
+    val phase: String,
+    val description: String,
+    val keyTips: List<String>,
+    val targetLevel: String = "UCE", // UCE, PLE, UACE
+    val unebRefCode: String? = null
+)
+
+enum class MilestoneStatus(val label: String, val colorHex: Long) {
+    COMPLETED("Completed ✓", 0xFF10B981),
+    IN_PROGRESS("Current Phase 🎯", 0xFFF59E0B),
+    UPCOMING("Scheduled ⏳", 0xFF4B41E1),
+    CRITICAL("National Exam 🏆", 0xFFF43F5E)
+}

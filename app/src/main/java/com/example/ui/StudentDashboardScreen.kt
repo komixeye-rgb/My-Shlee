@@ -21,8 +21,10 @@ import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -65,7 +67,11 @@ fun StudentDashboardScreen(
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val syncStatusMessage by viewModel.syncStatusMessage.collectAsStateWithLifecycle()
 
-    var activeTab by remember { mutableIntStateOf(0) } // 0 = Radar, 1 = Leaderboard, 2 = Daily Goals, 3 = Payments
+    var activeTab by remember { mutableIntStateOf(0) } // 0 = Radar, 1 = Roadmap, 2 = Leaderboard, 3 = Daily Goals, 4 = Payments
+    var selectedRoadmapLevel by remember { mutableStateOf(userProfile.candidateLevel) }
+    val currentMilestones = remember(selectedRoadmapLevel) {
+        viewModel.getMilestonesForLevel(selectedRoadmapLevel)
+    }
     var showShareModal by remember { mutableStateOf(false) }
     var showAuthModal by remember { mutableStateOf(false) }
     var selectedAiSubject by remember { mutableStateOf<SubjectScore?>(null) }
@@ -200,7 +206,7 @@ fun StudentDashboardScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Navigation Tabs with smooth selection transitions (4 Tabs)
+            // Navigation Tabs with smooth selection transitions (5 Tabs)
             ScrollableTabRow(
                 selectedTabIndex = activeTab,
                 containerColor = SlateSurface,
@@ -239,6 +245,21 @@ fun StudentDashboardScreen(
                     onClick = { activeTab = 1 },
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.School, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Roadmap", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        }
+                    },
+                    selectedContentColor = EmeraldLight,
+                    unselectedContentColor = TextSecondary,
+                    modifier = Modifier.testTag("tab_study_roadmap")
+                )
+
+                Tab(
+                    selected = activeTab == 2,
+                    onClick = { activeTab = 2 },
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.EmojiEvents, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(6.dp))
                             Text("Leaderboard", fontWeight = FontWeight.Bold, fontSize = 12.sp)
@@ -250,8 +271,8 @@ fun StudentDashboardScreen(
                 )
 
                 Tab(
-                    selected = activeTab == 2,
-                    onClick = { activeTab = 2 },
+                    selected = activeTab == 3,
+                    onClick = { activeTab = 3 },
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -265,8 +286,8 @@ fun StudentDashboardScreen(
                 )
 
                 Tab(
-                    selected = activeTab == 3,
-                    onClick = { activeTab = 3 },
+                    selected = activeTab == 4,
+                    onClick = { activeTab = 4 },
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.Payments, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -316,6 +337,21 @@ fun StudentDashboardScreen(
                     }
 
                     1 -> {
+                        StudyRoadmapSection(
+                            userProfile = userProfile,
+                            milestones = currentMilestones,
+                            selectedLevel = selectedRoadmapLevel,
+                            onLevelSelected = { selectedRoadmapLevel = it },
+                            onPracticeClick = {
+                                selectedPracticeSubject = subjectScores.firstOrNull()
+                            },
+                            onAskAiClick = {
+                                selectedAiSubject = subjectScores.firstOrNull()
+                            }
+                        )
+                    }
+
+                    2 -> {
                         NationalLeaderboardSection(
                             candidates = leaderboardCandidates,
                             selectedLevelFilter = selectedFilter,
@@ -323,7 +359,7 @@ fun StudentDashboardScreen(
                         )
                     }
 
-                    2 -> {
+                    3 -> {
                         NotificationSettingsCard(
                             userProfile = userProfile,
                             onToggleNotification = { viewModel.toggleNotification(it) },
@@ -331,7 +367,7 @@ fun StudentDashboardScreen(
                         )
                     }
 
-                    3 -> {
+                    4 -> {
                         LandingPricingSection(
                             plans = subscriptionPlans,
                             onSelectPlan = { plan ->

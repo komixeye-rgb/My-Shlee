@@ -12,6 +12,8 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.PieChart
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -149,10 +151,29 @@ fun LowerControlPanel(
                     selected = activeTab == 1,
                     onClick = { onTabSelected(1) },
                     icon = {
+                        Icon(Icons.Default.School, contentDescription = "Study Roadmap", modifier = Modifier.size(18.dp))
+                    },
+                    label = {
+                        Text("Roadmap", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = EmeraldLight,
+                        selectedTextColor = EmeraldLight,
+                        indicatorColor = EmeraldLight.copy(alpha = 0.18f),
+                        unselectedIconColor = TextSecondary,
+                        unselectedTextColor = TextSecondary
+                    ),
+                    modifier = Modifier.testTag("nav_item_roadmap")
+                )
+
+                NavigationBarItem(
+                    selected = activeTab == 2,
+                    onClick = { onTabSelected(2) },
+                    icon = {
                         Icon(Icons.Default.EmojiEvents, contentDescription = "Leaderboard", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
+                        Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
@@ -165,13 +186,13 @@ fun LowerControlPanel(
                 )
 
                 NavigationBarItem(
-                    selected = activeTab == 2,
-                    onClick = { onTabSelected(2) },
+                    selected = activeTab == 3,
+                    onClick = { onTabSelected(3) },
                     icon = {
                         Icon(Icons.Default.Alarm, contentDescription = "Daily Goals", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Daily Goals", fontSize = 9.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
+                        Text("Daily Goals", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
@@ -184,13 +205,13 @@ fun LowerControlPanel(
                 )
 
                 NavigationBarItem(
-                    selected = activeTab == 3,
-                    onClick = { onTabSelected(3) },
+                    selected = activeTab == 4,
+                    onClick = { onTabSelected(4) },
                     icon = {
                         Icon(Icons.Default.Payments, contentDescription = "Payments", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Payments", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
+                        Text("Payments", fontSize = 9.sp, fontWeight = if (activeTab == 4) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,

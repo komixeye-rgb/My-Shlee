@@ -267,7 +267,7 @@ private fun RadarChartCanvas(
 
             drawPath(
                 path = gridPath,
-                color = SlateBorder.copy(alpha = if (level == 0.8f) 0.6f else 0.3f),
+                color = Color(0xFFCBD5E1).copy(alpha = if (level == 0.8f) 0.9f else 0.6f),
                 style = Stroke(
                     width = if (level == 0.8f) 1.5f else 1f,
                     pathEffect = if (level == 0.8f) PathEffect.dashPathEffect(floatArrayOf(10f, 6f)) else null
@@ -280,7 +280,7 @@ private fun RadarChartCanvas(
             val endX = centerX + radius * cos(angle)
             val endY = centerY + radius * sin(angle)
             drawLine(
-                color = SlateBorder.copy(alpha = 0.4f),
+                color = Color(0xFFCBD5E1).copy(alpha = 0.7f),
                 start = Offset(centerX, centerY),
                 end = Offset(endX, endY),
                 strokeWidth = 1f
@@ -356,7 +356,7 @@ private fun RadarChartCanvas(
             val ly = centerY + labelR * sin(angle)
 
             val paint = android.graphics.Paint().apply {
-                color = if (isWeak) android.graphics.Color.parseColor("#F97316") else android.graphics.Color.WHITE
+                color = if (isWeak) android.graphics.Color.parseColor("#E11D48") else android.graphics.Color.parseColor("#1E293B")
                 textSize = 12.sp.toPx()
                 textAlign = when {
                     cos(angle) > 0.2f -> android.graphics.Paint.Align.LEFT

@@ -252,4 +252,195 @@ class StudentDashboardViewModel : ViewModel() {
             )
         )
     }
+
+    fun getMilestonesForLevel(level: String): List<ExamMilestone> {
+        return when {
+            level.contains("PLE", ignoreCase = true) || level.contains("Primary", ignoreCase = true) -> listOf(
+                ExamMilestone(
+                    id = "ple_01",
+                    title = "Term 1 Diagnostic & Syllabus Mapping",
+                    dateLabel = "15 March 2026",
+                    status = MilestoneStatus.COMPLETED,
+                    daysRemaining = null,
+                    phase = "Term 1 Foundation",
+                    description = "Comprehensive review of P.5 - P.7 topics across Mathematics, English, SST, and Science.",
+                    keyTips = listOf("Master long division & fraction word problems", "Create personal SST map summaries"),
+                    targetLevel = "PLE",
+                    unebRefCode = "PLE-2026-F1"
+                ),
+                ExamMilestone(
+                    id = "ple_02",
+                    title = "District Joint Pre-PLE Mock Exams",
+                    dateLabel = "10 August 2026",
+                    status = MilestoneStatus.IN_PROGRESS,
+                    daysRemaining = 24,
+                    phase = "Mock Assessment",
+                    description = "District-wide timed examinations replicating the official UNEB test center conditions.",
+                    keyTips = listOf("Time management: 2 hrs 15 mins per paper", "Eliminate careless spelling errors in English & Science"),
+                    targetLevel = "PLE",
+                    unebRefCode = "MOCK-KLA-PLE"
+                ),
+                ExamMilestone(
+                    id = "ple_03",
+                    title = "Final 5-Year Past Papers Speed Drill",
+                    dateLabel = "25 September 2026",
+                    status = MilestoneStatus.UPCOMING,
+                    daysRemaining = 70,
+                    phase = "Intensive Revision",
+                    description = "Full simulated past paper papers (2020-2025) with step-by-step marking schemes.",
+                    keyTips = listOf("Review diagrams of the human digestive and circulatory systems", "Memorize key historical dates for East Africa"),
+                    targetLevel = "PLE",
+                    unebRefCode = "SPRINT-PLE"
+                ),
+                ExamMilestone(
+                    id = "ple_04",
+                    title = "Official PLE Candidate Briefing",
+                    dateLabel = "02 November 2026",
+                    status = MilestoneStatus.UPCOMING,
+                    daysRemaining = 108,
+                    phase = "Pre-Exam Readiness",
+                    description = "Headteacher & invigilator briefing on candidate index verification and examination room rules.",
+                    keyTips = listOf("Check registration index number slip", "Prepare transparent geometry set & non-smudge pens"),
+                    targetLevel = "PLE",
+                    unebRefCode = "BRIEF-PLE-2026"
+                ),
+                ExamMilestone(
+                    id = "ple_05",
+                    title = "National PLE Examinations D-Day",
+                    dateLabel = "04 - 05 November 2026",
+                    status = MilestoneStatus.CRITICAL,
+                    daysRemaining = 110,
+                    phase = "National UNEB Exam",
+                    description = "Official national sitting: Mathematics & Social Studies (Day 1), Integrated Science & English (Day 2).",
+                    keyTips = listOf("Read each question twice before attempting", "Keep calm and stay focused for aggregate 4 distinction"),
+                    targetLevel = "PLE",
+                    unebRefCode = "UNEB-PLE-MAIN"
+                )
+            )
+            level.contains("UACE", ignoreCase = true) || level.contains("Senior 6", ignoreCase = true) -> listOf(
+                ExamMilestone(
+                    id = "uace_01",
+                    title = "Principal Subject Audit & Paper 3 Practicals",
+                    dateLabel = "28 February 2026",
+                    status = MilestoneStatus.COMPLETED,
+                    daysRemaining = null,
+                    phase = "Term 1 Foundation",
+                    description = "Laboratory skills audit for Biology, Chemistry, and Physics alongside Subsidiary ICT/Maths.",
+                    keyTips = listOf("Verify titration and food tests procedures", "Review General Paper essay structure"),
+                    targetLevel = "UACE",
+                    unebRefCode = "UACE-AUDIT"
+                ),
+                ExamMilestone(
+                    id = "uace_02",
+                    title = "National Joint Mock Examinations",
+                    dateLabel = "01 August 2026",
+                    status = MilestoneStatus.IN_PROGRESS,
+                    daysRemaining = 15,
+                    phase = "Joint Mock Trials",
+                    description = "Comprehensive multi-school joint mocks covering both Paper 1, Paper 2, and practical components.",
+                    keyTips = listOf("Focus on 20-mark essay articulation", "Maintain numerical precision in Calculus and Mechanics"),
+                    targetLevel = "UACE",
+                    unebRefCode = "MOCK-UACE-2026"
+                ),
+                ExamMilestone(
+                    id = "uace_03",
+                    title = "University Cut-Off Benchmark Sprint",
+                    dateLabel = "15 September 2026",
+                    status = MilestoneStatus.UPCOMING,
+                    daysRemaining = 60,
+                    phase = "Competitive Distinction",
+                    description = "Focus on securing 20 points for Government Merit scholarship admissions at Makerere, Kyambogo, and Mbarara.",
+                    keyTips = listOf("Target 'A' grades in all three principal subjects", "Practice 2.5 hour time splits for lengthy calculations"),
+                    targetLevel = "UACE",
+                    unebRefCode = "SPRINT-UACE"
+                ),
+                ExamMilestone(
+                    id = "uace_04",
+                    title = "National UACE Examinations Commencement",
+                    dateLabel = "09 November 2026",
+                    status = MilestoneStatus.CRITICAL,
+                    daysRemaining = 115,
+                    phase = "National UNEB Exam",
+                    description = "Commencement of A-Level national papers nationwide across all registered examination centers.",
+                    keyTips = listOf("Ensure proper labeling of answer booklets", "Review past paper examiners' reports for common pitfalls"),
+                    targetLevel = "UACE",
+                    unebRefCode = "UNEB-UACE-MAIN"
+                )
+            )
+            else -> listOf( // Default UCE (Senior 4 / O-Level)
+                ExamMilestone(
+                    id = "uce_01",
+                    title = "Term 1 Syllabus Completion & Diagnostic Test",
+                    dateLabel = "20 March 2026",
+                    status = MilestoneStatus.COMPLETED,
+                    daysRemaining = null,
+                    phase = "Foundation & Diagnosis",
+                    description = "Baseline assessment of core O-Level syllabus across 8 registered subjects.",
+                    keyTips = listOf("Identify weakest topics in Physics and Biology", "Consolidate Mathematics Paper 1 formula notes"),
+                    targetLevel = "UCE",
+                    unebRefCode = "UCE-TERM1-DIAG"
+                ),
+                ExamMilestone(
+                    id = "uce_02",
+                    title = "Regional Joint Mock Examinations (Wakiso & Kampala)",
+                    dateLabel = "14 July 2026",
+                    status = MilestoneStatus.IN_PROGRESS,
+                    daysRemaining = 12,
+                    phase = "Regional Joint Mocks",
+                    description = "Rigorous multi-school mock exams benchmarked against the distinction 1 standard (80%+).",
+                    keyTips = listOf("Practice Section B structured essay formats", "Double check chemical equation balancing in Chemistry"),
+                    targetLevel = "UCE",
+                    unebRefCode = "WAKISHA-MOCK-2026"
+                ),
+                ExamMilestone(
+                    id = "uce_03",
+                    title = "10-Year UNEB Past Papers Intensive Sprint",
+                    dateLabel = "01 September 2026",
+                    status = MilestoneStatus.UPCOMING,
+                    daysRemaining = 46,
+                    phase = "Intensive Past Papers",
+                    description = "Daily timed drills analyzing repeating UNEB question patterns from 2014 to 2025.",
+                    keyTips = listOf("Time yourself: 2.5 hours strictly without phone distractions", "Consult AI Revision Tutor for step-by-step math proofs"),
+                    targetLevel = "UCE",
+                    unebRefCode = "PASTPAPERS-UCE-10Y"
+                ),
+                ExamMilestone(
+                    id = "uce_04",
+                    title = "Official UNEB Candidate Briefing Day",
+                    dateLabel = "09 October 2026",
+                    status = MilestoneStatus.UPCOMING,
+                    daysRemaining = 84,
+                    phase = "Examination Readiness",
+                    description = "Mandatory in-person briefing by Chief Invigilators covering timetable, index numbers, and exam ethics.",
+                    keyTips = listOf("Verify your photograph and name on the UNEB center register", "Inspect authorized calculator models"),
+                    targetLevel = "UCE",
+                    unebRefCode = "BRIEF-UCE-2026"
+                ),
+                ExamMilestone(
+                    id = "uce_05",
+                    title = "National UCE Examinations Commencement (D-Day)",
+                    dateLabel = "12 October 2026",
+                    status = MilestoneStatus.CRITICAL,
+                    daysRemaining = 87,
+                    phase = "National UNEB Exam",
+                    description = "Commencement of main national papers (Physics, Mathematics, Biology, Chemistry, English, Geography).",
+                    keyTips = listOf("Arrive at the examination hall 30 minutes early", "Aim for Distinction 1 in all 8 compulsory subjects for Aggregate 8"),
+                    targetLevel = "UCE",
+                    unebRefCode = "UNEB-UCE-MAIN"
+                ),
+                ExamMilestone(
+                    id = "uce_06",
+                    title = "National Grading & Division 1 Release",
+                    dateLabel = "18 January 2027",
+                    status = MilestoneStatus.UPCOMING,
+                    daysRemaining = 185,
+                    phase = "Results & Admissions",
+                    description = "Official release of UNEB results by the Minister of Education and Senior 5 merit selections.",
+                    keyTips = listOf("Check SMS verification via 6600", "Prepare academic transcripts for A-Level school placement"),
+                    targetLevel = "UCE",
+                    unebRefCode = "UNEB-RESULTS-2026"
+                )
+            )
+        }
+    }
 }
