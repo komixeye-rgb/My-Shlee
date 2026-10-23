@@ -1,0 +1,397 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Shlee Student Dashboard REST API",
+    "description": "Comprehensive REST API for Ugandan UNEB Examination Prep Hub. Provides endpoints for student profiles, national leaderboard candidates, subject assessments, mobile money subscription payments (MTN 0775551996 / Airtel 0704556555), and revenue analytics.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Shlee Education Hub Developer Support",
+      "email": "komixeye@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ezrrixubfgpxvxcakfrr.supabase.co/rest/v1",
+      "description": "Supabase Production PostgREST API"
+    },
+    {
+      "url": "https://ais-dev-v67gtuejmryoz32nnjxk3g-34337603678.europe-west1.run.app/api",
+      "description": "AI Studio Development Server"
+    }
+  ],
+  "paths": {
+    "/profiles": {
+      "get": {
+        "summary": "Fetch Student Profiles",
+        "description": "Returns candidate study profiles with streaks, target hours, and projected UNEB aggregates.",
+        "parameters": [
+          {
+            "name": "student_id",
+            "in": "query",
+            "description": "Filter by unique student index ID (e.g. eq.UG-2026-8842)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "select",
+            "in": "query",
+            "description": "Columns to select",
+            "schema": {
+              "type": "string",
+              "default": "*"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of student profiles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Profile"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create or Upsert Student Profile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Profile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Profile successfully created or updated"
+          }
+        }
+      }
+    },
+    "/candidates": {
+      "get": {
+        "summary": "Fetch National Leaderboard Candidates",
+        "description": "Returns verified candidates across King's College Budo, St. Mary's Kitende, Gayaza High, Namagunga, etc.",
+        "parameters": [
+          {
+            "name": "order",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "aggregate.asc,streak.desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "National candidate rankings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Candidate"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Upsert Candidate Score",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Candidate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Candidate recorded"
+          }
+        }
+      }
+    },
+    "/subject_scores": {
+      "get": {
+        "summary": "Fetch Diagnostic Subject Scores",
+        "parameters": [
+          {
+            "name": "student_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of assessed subject scores with UNEB grades",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubjectScore"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Record Subject Score Assessment",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubjectScore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Assessment score recorded"
+          }
+        }
+      }
+    },
+    "/subscription_plans": {
+      "get": {
+        "summary": "List Subscription Plans",
+        "description": "Returns active pricing tiers: 7-Day Quick Sprint (UGX 5,000), Full Term Pass (UGX 25,000), Final Candidate Pass (UGX 60,000).",
+        "responses": {
+          "200": {
+            "description": "Active subscription plans",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriptionPlan"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment_transactions": {
+      "get": {
+        "summary": "List Mobile Money Transactions",
+        "responses": {
+          "200": {
+            "description": "Payment history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentTransaction"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Initiate & Record Mobile Money Payment",
+        "description": "Registers a Mobile Money payment transaction via MTN (0775551996) or Airtel (0704556555).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentTransaction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transaction recorded with COMPLETED status"
+          }
+        }
+      }
+    },
+    "/v_payment_totals": {
+      "get": {
+        "summary": "Get Aggregated Payment Totals & Revenue",
+        "description": "Returns total revenue (UGX), total transaction counts, average order values, and latest transaction date.",
+        "responses": {
+          "200": {
+            "description": "Payment analytics rollup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentTotals"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v_candidate_rankings": {
+      "get": {
+        "summary": "Get Computed National Leaderboard with Ranks",
+        "description": "Uses SQL window function RANK() OVER (ORDER BY aggregate ASC, streak DESC) to return national rankings.",
+        "responses": {
+          "200": {
+            "description": "Ranked candidates list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CandidateRank"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apikey"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Profile": {
+        "type": "object",
+        "required": ["id", "student_id", "name"],
+        "properties": {
+          "id": { "type": "string", "example": "UG-2026-8842" },
+          "student_id": { "type": "string", "example": "UG-2026-8842" },
+          "name": { "type": "string", "example": "Kato Ivan" },
+          "projected_aggregate": { "type": "string", "example": "Agg 8" },
+          "division": { "type": "string", "example": "Division 1" },
+          "current_streak": { "type": "integer", "example": 14 },
+          "target_hours": { "type": "number", "example": 3.5 },
+          "target_quizzes": { "type": "integer", "example": 5 },
+          "reminder_time": { "type": "string", "example": "07:30 PM" }
+        }
+      },
+      "Candidate": {
+        "type": "object",
+        "required": ["id", "name", "school", "region", "aggregate", "division"],
+        "properties": {
+          "id": { "type": "string", "example": "UG-KLA-101" },
+          "name": { "type": "string", "example": "Kato Emmanuel" },
+          "school": { "type": "string", "example": "St. Mary's College Kisubi" },
+          "region": { "type": "string", "example": "Central" },
+          "aggregate": { "type": "integer", "minimum": 4, "maximum": 72, "example": 8 },
+          "division": { "type": "string", "example": "Division 1" },
+          "streak": { "type": "integer", "example": 28 },
+          "avatar_color": { "type": "integer", "example": 4280191205 }
+        }
+      },
+      "CandidateRank": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Candidate" },
+          {
+            "type": "object",
+            "properties": {
+              "national_rank": { "type": "integer", "example": 1 }
+            }
+          }
+        ]
+      },
+      "SubjectScore": {
+        "type": "object",
+        "required": ["student_id", "subject_name", "score_percentage", "uneb_grade"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "student_id": { "type": "string", "example": "UG-2026-8842" },
+          "subject_name": { "type": "string", "example": "Mathematics" },
+          "score_percentage": { "type": "number", "minimum": 0, "maximum": 100, "example": 84.5 },
+          "uneb_grade": { "type": "string", "example": "D1 (Distinction 1)" },
+          "assessed_date": { "type": "string", "format": "date", "example": "2026-10-22" }
+        }
+      },
+      "SubscriptionPlan": {
+        "type": "object",
+        "required": ["id", "title", "price_ugx", "period"],
+        "properties": {
+          "id": { "type": "string", "example": "termly" },
+          "title": { "type": "string", "example": "Full Term Pass" },
+          "price_ugx": { "type": "integer", "example": 25000 },
+          "period": { "type": "string", "example": "Term (3 Months)" },
+          "description": { "type": "string", "example": "Complete UNEB syllabus prep with past papers" },
+          "features": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["Unlimited AI Tutor", "UNEB Mock Papers", "National Leaderboard", "Radar Analytics"]
+          },
+          "is_popular": { "type": "boolean", "example": true }
+        }
+      },
+      "PaymentTransaction": {
+        "type": "object",
+        "required": ["id", "student_id", "plan_id", "plan_title", "amount_ugx", "phone_number", "provider"],
+        "properties": {
+          "id": { "type": "string", "example": "TXN-849201" },
+          "student_id": { "type": "string", "example": "UG-2026-8842" },
+          "plan_id": { "type": "string", "example": "termly" },
+          "plan_title": { "type": "string", "example": "Full Term Pass" },
+          "amount_ugx": { "type": "integer", "example": 25000 },
+          "phone_number": { "type": "string", "example": "0775551996" },
+          "provider": { "type": "string", "enum": ["MTN Mobile Money", "Airtel Money"], "example": "MTN Mobile Money" },
+          "status": { "type": "string", "enum": ["PENDING", "COMPLETED", "FAILED"], "default": "COMPLETED" },
+          "transaction_date": { "type": "string", "format": "date", "example": "2026-10-22" }
+        }
+      },
+      "PaymentTotals": {
+        "type": "object",
+        "properties": {
+          "total_transactions": { "type": "integer", "example": 48 },
+          "total_successful_transactions": { "type": "integer", "example": 46 },
+          "total_revenue_ugx": { "type": "integer", "example": 1250000 },
+          "average_order_value_ugx": { "type": "number", "example": 27173.91 },
+          "last_transaction_date": { "type": "string", "format": "date", "example": "2026-10-22" }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyAuth": []
+    },
+    {
+      "bearerAuth": []
+    }
+  ]
+}

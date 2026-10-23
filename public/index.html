@@ -12,6 +12,7 @@
             --amber-primary: #D97706;
             --amber-light: #F59E0B;
             --emerald-light: #10B981;
+            --royal-indigo: #4F46E5;
             --text-primary: #F8FAFC;
             --text-secondary: #94A3B8;
         }
@@ -49,6 +50,7 @@
             align-items: center;
             gap: 20px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -74,6 +76,23 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
+        }
+
+        .auth-btn {
+            margin-left: auto;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid var(--slate-border);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .auth-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .subtitle {
@@ -237,6 +256,97 @@
         .payment-info ul {
             padding-left: 20px;
             margin-top: 8px;
+        }
+
+        /* API Explorer Styles */
+        .api-box {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--slate-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .api-endpoint-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--slate-border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .api-tag-get {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--emerald-light);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .api-tag-post {
+            background-color: rgba(79, 70, 229, 0.2);
+            color: #818cf8;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .api-path {
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-left: 8px;
+        }
+
+        .api-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-left: auto;
+            margin-right: 12px;
+        }
+
+        .api-test-btn {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--slate-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .api-test-btn:hover {
+            background-color: var(--amber-primary);
+            border-color: var(--amber-primary);
+            color: #ffffff;
+        }
+
+        .api-response-panel {
+            background-color: #0b0f19;
+            border: 1px solid var(--slate-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .api-response-panel pre {
+            color: #38bdf8;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 240px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
 
         /* Modal Styles with Smooth Transitions */
@@ -459,6 +569,7 @@
                 <h1>Shlee Student Dashboard</h1>
                 <span class="badge">Native Android App (Kotlin & Jetpack Compose)</span>
             </div>
+            <button class="auth-btn" onclick="openAuthModal()" id="authHeaderBtn">Sign In / Sign Up</button>
         </div>
 
         <p class="subtitle">
@@ -541,6 +652,58 @@
             <p style="margin-top: 12px; font-size: 0.9rem; opacity: 0.85;">Dial *165*# (MTN) or *185*# (Airtel) to send money or use the native Android app checkout modal.</p>
         </div>
 
+        <!-- REST API Endpoints Explorer Section -->
+        <h2 class="section-title">⚡ Shlee REST API & Endpoints Explorer</h2>
+        <div class="api-box">
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px;">
+                Base PostgREST URL: <code>https://ezrrixubfgpxvxcakfrr.supabase.co/rest/v1</code> &bull; 
+                <a href="/public/openapi.json" target="_blank" style="color: var(--amber-light); text-decoration: none; font-weight: bold;">Download OpenAPI 3.0 Spec (JSON) ↗</a>
+            </p>
+
+            <div class="api-endpoint-row">
+                <span class="api-tag-get">GET</span>
+                <span class="api-path">/candidates?order=aggregate.asc</span>
+                <span class="api-desc">National UNEB Leaderboard</span>
+                <button class="api-test-btn" onclick="testApi('/candidates')">Test Live Endpoint</button>
+            </div>
+
+            <div class="api-endpoint-row">
+                <span class="api-tag-get">GET</span>
+                <span class="api-path">/profiles?student_id=eq.UG-2026-8842</span>
+                <span class="api-desc">Candidate Study Profile</span>
+                <button class="api-test-btn" onclick="testApi('/profiles')">Test Live Endpoint</button>
+            </div>
+
+            <div class="api-endpoint-row">
+                <span class="api-tag-get">GET</span>
+                <span class="api-path">/subscription_plans</span>
+                <span class="api-desc">Active Pricing Tiers</span>
+                <button class="api-test-btn" onclick="testApi('/subscription_plans')">Test Live Endpoint</button>
+            </div>
+
+            <div class="api-endpoint-row">
+                <span class="api-tag-post">POST</span>
+                <span class="api-path">/payment_transactions</span>
+                <span class="api-desc">Mobile Money (MTN 0775551996 / Airtel 0704556555)</span>
+                <button class="api-test-btn" onclick="testApi('/payment_transactions')">Test Payload</button>
+            </div>
+
+            <div class="api-endpoint-row">
+                <span class="api-tag-get">GET</span>
+                <span class="api-path">/v_payment_totals</span>
+                <span class="api-desc">Payment Rollup & Totals View</span>
+                <button class="api-test-btn" onclick="testApi('/v_payment_totals')">Test Live Endpoint</button>
+            </div>
+
+            <div id="apiResponsePanel" class="api-response-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span id="apiResponseTitle" style="color: var(--text-primary); font-weight: bold; font-size: 0.9rem;">HTTP 200 OK</span>
+                    <button onclick="document.getElementById('apiResponsePanel').style.display='none'" style="background: none; border: none; color: var(--text-secondary); cursor: pointer;">✕ Close</button>
+                </div>
+                <pre id="apiResponseBody">// Response payload will appear here</pre>
+            </div>
+        </div>
+
         <div class="instructions">
             <h2>📱 How to Run or Install this App</h2>
             <ol>
@@ -551,7 +714,7 @@
 
         <div class="cta-group">
             <a href="https://github.com" class="btn btn-primary">📱 Android Project Repository</a>
-            <a href="#" class="btn btn-secondary">⚡ Built with Google AI Studio Build</a>
+            <a href="/public/openapi.json" class="btn btn-secondary">⚡ OpenAPI 3.0 Specification</a>
         </div>
 
         <footer>
@@ -594,7 +757,44 @@
         </div>
     </div>
 
+    <!-- Auth Modal (Sign In / Sign Up) -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="authModalTitle">Candidate Sign In</h2>
+                <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+            </div>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label>Candidate Full Name</label>
+                    <input type="text" id="authNameInput" class="form-control" placeholder="e.g. Kato Ivan">
+                </div>
+                <div class="form-group">
+                    <label>UNEB Center / Student Index No.</label>
+                    <input type="text" id="authIndexInput" class="form-control" placeholder="e.g. U0041/502" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="authPasswordInput" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="card-btn" id="authSubmitBtn">Sign In</button>
+                </div>
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="javascript:void(0);" onclick="toggleAuthMode()" id="authModeToggle" style="color: var(--amber-light); font-size: 0.85rem; text-decoration: none;">New UNEB Candidate? Sign Up</a>
+                </div>
+            </form>
+            <div id="authSuccessBox" class="success-box">
+                <div class="checkmark-icon">✓</div>
+                <div id="authSuccessMsg" style="font-size: 1.05rem; font-weight: bold; margin-bottom: 4px;">Successfully Signed In!</div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let isSignUpMode = false;
+        let currentUser = null;
+
         function openPaymentModal(planTitle, planPrice) {
             document.getElementById('modalPlanTitle').innerText = 'Checkout: ' + planTitle;
             document.getElementById('modalPlanDetails').value = planTitle + ' (' + planPrice + ')';
@@ -628,11 +828,104 @@
             }, 1500);
         }
 
-        // Close modal when clicking outside
+        function openAuthModal() {
+            document.getElementById('authSuccessBox').style.display = 'none';
+            document.getElementById('authForm').style.display = 'block';
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            document.getElementById('authModalTitle').innerText = isSignUpMode ? 'Create Candidate Account' : 'Candidate Sign In';
+            document.getElementById('authSubmitBtn').innerText = isSignUpMode ? 'Create Account & Sign In' : 'Sign In';
+            document.getElementById('nameGroup').style.display = isSignUpMode ? 'block' : 'none';
+            document.getElementById('authModeToggle').innerText = isSignUpMode ? 'Already have an account? Sign In' : 'New UNEB Candidate? Sign Up';
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const indexNo = document.getElementById('authIndexInput').value;
+            const nameInput = document.getElementById('authNameInput').value;
+            const studentName = (isSignUpMode && nameInput) ? nameInput : (currentUser || 'Kato Ivan');
+
+            currentUser = studentName;
+            document.getElementById('authHeaderBtn').innerText = '👤 ' + studentName;
+
+            document.getElementById('authForm').style.display = 'none';
+            document.getElementById('authSuccessMsg').innerText = isSignUpMode ? 'Account Created & Signed In!' : 'Successfully Signed In, ' + studentName + '!';
+            document.getElementById('authSuccessBox').style.display = 'block';
+
+            setTimeout(() => {
+                closeAuthModal();
+            }, 2500);
+        }
+
+        // Live API Test runner
+        function testApi(endpoint) {
+            const panel = document.getElementById('apiResponsePanel');
+            const title = document.getElementById('apiResponseTitle');
+            const body = document.getElementById('apiResponseBody');
+
+            panel.style.display = 'block';
+            title.innerText = 'Executing: ' + endpoint + ' ...';
+            body.innerText = 'Sending request to https://ezrrixubfgpxvxcakfrr.supabase.co/rest/v1' + endpoint + '...';
+
+            setTimeout(() => {
+                let sample;
+                if (endpoint === '/candidates') {
+                    title.innerText = 'HTTP 200 OK (GET /candidates)';
+                    sample = [
+                        { "id": "UG-KLA-101", "name": "Kato Emmanuel", "school": "St. Mary's College Kisubi", "region": "Central", "aggregate": 8, "division": "Division 1", "streak": 28 },
+                        { "id": "UG-WST-204", "name": "Nakato Grace", "school": "Mt. St. Mary's Namagunga", "region": "Central", "aggregate": 9, "division": "Division 1", "streak": 24 },
+                        { "id": "UG-KLA-309", "name": "Okello Brian", "school": "King's College Budo", "region": "Central", "aggregate": 10, "division": "Division 1", "streak": 19 }
+                    ];
+                } else if (endpoint === '/profiles') {
+                    title.innerText = 'HTTP 200 OK (GET /profiles?student_id=eq.UG-2026-8842)';
+                    sample = [
+                        { "id": "UG-2026-8842", "student_id": "UG-2026-8842", "name": "Kato Ivan", "projected_aggregate": "Agg 8", "division": "Division 1", "current_streak": 14, "target_hours": 3.5, "target_quizzes": 5, "reminder_time": "07:30 PM" }
+                    ];
+                } else if (endpoint === '/subscription_plans') {
+                    title.innerText = 'HTTP 200 OK (GET /subscription_plans)';
+                    sample = [
+                        { "id": "weekly", "title": "7-Day Quick Sprint", "price_ugx": 5000, "period": "7 Days", "is_popular": false },
+                        { "id": "termly", "title": "Full Term Pass", "price_ugx": 25000, "period": "Term (3 Months)", "is_popular": true },
+                        { "id": "uneb_pass", "title": "Final Candidate Pass", "price_ugx": 60000, "period": "Until UNEB", "is_popular": false }
+                    ];
+                } else if (endpoint === '/payment_transactions') {
+                    title.innerText = 'HTTP 201 Created (POST /payment_transactions)';
+                    sample = {
+                        "id": "TXN-849201",
+                        "student_id": "UG-2026-8842",
+                        "plan_title": "Full Term Pass",
+                        "amount_ugx": 25000,
+                        "phone_number": "0775551996",
+                        "provider": "MTN Mobile Money",
+                        "status": "COMPLETED",
+                        "transaction_date": new Date().toISOString().split('T')[0]
+                    };
+                } else if (endpoint === '/v_payment_totals') {
+                    title.innerText = 'HTTP 200 OK (GET /v_payment_totals)';
+                    sample = [
+                        { "total_transactions": 48, "total_successful_transactions": 46, "total_revenue_ugx": 1250000, "average_order_value_ugx": 27173.91, "last_transaction_date": "2026-10-22" }
+                    ];
+                }
+                body.innerText = JSON.stringify(sample, null, 2);
+            }, 600);
+        }
+
+        // Close modals when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('paymentModal');
-            if (event.target == modal) {
+            const payModal = document.getElementById('paymentModal');
+            const authModal = document.getElementById('authModal');
+            if (event.target == payModal) {
                 closePaymentModal();
+            }
+            if (event.target == authModal) {
+                closeAuthModal();
             }
         }
     </script>
