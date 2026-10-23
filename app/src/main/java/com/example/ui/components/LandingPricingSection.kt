@@ -276,12 +276,12 @@ fun LandingPricingSection(
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Primary (PLE)",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = if (selectedLevelTab == 0) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    Text(
+                        text = "Primary (PLE)",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (selectedLevelTab == 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
             }
 
             Box(
@@ -293,12 +293,12 @@ fun LandingPricingSection(
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Secondary (UCE/UACE)",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = if (selectedLevelTab == 1) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    Text(
+                        text = "Secondary (UCE/UACE)",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (selectedLevelTab == 1) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
             }
         }
 
@@ -540,25 +540,25 @@ fun LandingPricingSection(
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Surface(
-                        color = Color(0xFFFECA0A).copy(alpha = 0.15f),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFECA0A)),
+                        color = SunnyAmber.copy(alpha = 0.15f),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, SunnyAmber),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f).padding(vertical = 4.dp)
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
-                            Text("MTN MoMo", fontWeight = FontWeight.Bold, color = Color(0xFFB8860B), fontSize = 11.sp)
+                            Text("MTN MoMo", fontWeight = FontWeight.Bold, color = SunnyAmber, fontSize = 11.sp)
                             Text("*165# prompt", color = MaterialTheme.colorScheme.onSurface, fontSize = 10.sp)
                         }
                     }
 
                     Surface(
-                        color = Color(0xFFEF4444).copy(alpha = 0.15f),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFEF4444)),
+                        color = CoralSalmon.copy(alpha = 0.15f),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, CoralSalmon),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.weight(1f).padding(vertical = 4.dp)
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
-                            Text("Airtel Money", fontWeight = FontWeight.Bold, color = Color(0xFFB91C1C), fontSize = 11.sp)
+                            Text("Airtel Money", fontWeight = FontWeight.Bold, color = CoralSalmon, fontSize = 11.sp)
                             Text("*185# prompt", color = MaterialTheme.colorScheme.onSurface, fontSize = 10.sp)
                         }
                     }
@@ -610,7 +610,7 @@ private fun LandingPlanCard(
                             Text(
                                 text = "POPULAR",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 8.sp,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
@@ -666,7 +666,7 @@ private fun LandingPlanCard(
                     text = if (isFree) "Start 7-Day Free Trial" else "Subscribe for ${plan.priceUgx}",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (isFree) MaterialTheme.colorScheme.onSurface else Color.White
+                    color = if (isFree) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

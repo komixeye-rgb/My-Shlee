@@ -157,13 +157,13 @@ fun AuthModal(
                                 Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
                                 onDismiss()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444)),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .testTag("logout_button")
                         ) {
-                            Text("Sign Out", fontWeight = FontWeight.Bold)
+                            Text("Sign Out", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onError)
                         }
                     } else {
                         // Level Selection Toggle (Primary PLE vs Secondary UCE/UACE)
@@ -195,7 +195,7 @@ fun AuthModal(
                                     text = "🎒 Primary (PLE)",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (isPrimary) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = if (isPrimary) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
 
@@ -212,7 +212,7 @@ fun AuthModal(
                                     text = "🎓 Secondary (UCE)",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (!isPrimary) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = if (!isPrimary) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }

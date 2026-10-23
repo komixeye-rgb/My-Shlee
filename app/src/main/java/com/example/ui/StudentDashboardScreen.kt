@@ -318,6 +318,11 @@ fun StudentDashboardScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Sync selectedRoadmapLevel when userProfile changes (e.g. after login/level update)
+            LaunchedEffect(userProfile.candidateLevel) {
+                selectedRoadmapLevel = userProfile.candidateLevel
+            }
+
             // Smooth Animated Tab Content Transition
             AnimatedContent(
                 targetState = activeTab,
@@ -337,11 +342,11 @@ fun StudentDashboardScreen(
                 when (targetTab) {
                     0 -> {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            // Quick Focus Session Launch Bar
+                            // Quick Focus Session Launch Bar - Refined Glassmorphism Style
                             Card(
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f)),
                                 shape = RoundedCornerShape(16.dp),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable { activeTab = 1 }
@@ -350,38 +355,47 @@ fun StudentDashboardScreen(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Text("⏱️", fontSize = 18.sp)
-                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp)
+                                                .clip(CircleShape)
+                                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text("⏱️", fontSize = 20.sp)
+                                        }
+                                        Spacer(modifier = Modifier.width(12.dp))
                                         Column {
                                             Text(
-                                                text = "Pomodoro Study Session (25 min)",
-                                                style = MaterialTheme.typography.labelMedium,
+                                                text = "Pomodoro Study Sprint",
+                                                style = MaterialTheme.typography.titleSmall,
                                                 fontWeight = FontWeight.Bold,
                                                 color = MaterialTheme.colorScheme.onSurface
                                             )
                                             Text(
-                                                text = "${userProfile.focusSessionsCompleted} completed today • Tap to launch focus timer",
+                                                text = "25m Focus • ${userProfile.focusSessionsCompleted} today",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                                 fontSize = 11.sp
                                             )
                                         }
                                     }
-                                    Surface(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape = RoundedCornerShape(8.dp)
+                                    Button(
+                                        onClick = { activeTab = 1 },
+                                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                                        shape = RoundedCornerShape(10.dp),
+                                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                                     ) {
                                         Text(
-                                            text = "Start Timer ➜",
+                                            text = "Launch ➜",
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = Color.White,
                                             fontWeight = FontWeight.Bold,
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                            color = MaterialTheme.colorScheme.onPrimary
                                         )
                                     }
                                 }

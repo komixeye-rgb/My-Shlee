@@ -157,9 +157,9 @@ fun LowerControlPanel(
                         Text("Focus & Goals", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                        selectedTextColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                        indicatorColor = (if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary).copy(alpha = 0.12f),
+                        selectedIconColor = MaterialTheme.colorScheme.secondary,
+                        selectedTextColor = MaterialTheme.colorScheme.secondary,
+                        indicatorColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
@@ -195,9 +195,9 @@ fun LowerControlPanel(
                         Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                        selectedTextColor = if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                        indicatorColor = (if (activeTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary).copy(alpha = 0.12f),
+                        selectedIconColor = MaterialTheme.colorScheme.secondary,
+                        selectedTextColor = MaterialTheme.colorScheme.secondary,
+                        indicatorColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f),
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
