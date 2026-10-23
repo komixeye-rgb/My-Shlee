@@ -287,7 +287,7 @@ fun NotificationSettingsCard(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Divider(color = SlateBorder)
+            HorizontalDivider(color = SlateBorder)
 
             Spacer(modifier = Modifier.height(16.dp))
 

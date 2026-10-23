@@ -23,6 +23,13 @@ class StudentDashboardViewModel : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(true)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
 
+    private val _isDarkMode = MutableStateFlow(true)
+    val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
+
+    fun toggleTheme() {
+        _isDarkMode.value = !_isDarkMode.value
+    }
+
     private val _userProfile = MutableStateFlow(
         UserProfile(
             studentId = "UG-2026-8842",
@@ -175,6 +182,14 @@ class StudentDashboardViewModel : ViewModel() {
 
     fun updateLevelFilter(filter: String) {
         _selectedFilter.value = filter
+    }
+
+    fun updateCandidateLevel(level: String) {
+        val updated = _userProfile.value.copy(candidateLevel = level)
+        _userProfile.value = updated
+        viewModelScope.launch {
+            SupabaseService.syncUserProfile(updated)
+        }
     }
 
     fun toggleNotification(enabled: Boolean) {

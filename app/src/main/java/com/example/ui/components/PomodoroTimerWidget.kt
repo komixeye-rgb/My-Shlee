@@ -134,9 +134,9 @@ fun PomodoroTimerWidget(
     val timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = SlateSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, SlateBorder),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = modifier
             .fillMaxWidth()
@@ -181,13 +181,13 @@ fun PomodoroTimerWidget(
                                 text = "UNEB Pomodoro Focus Timer",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 15.sp,
-                                color = EduTextPrimary
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         Text(
                             text = if (isRunning) "Deep focus session in progress" else "Timed intervals for maximum retention",
                             fontSize = 11.sp,
-                            color = EduTextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -221,7 +221,7 @@ fun PomodoroTimerWidget(
                         Icon(
                             imageVector = if (isCollapsed) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
                             contentDescription = if (isCollapsed) "Expand Timer" else "Collapse Timer",
-                            tint = EduTextSecondary
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -234,7 +234,7 @@ fun PomodoroTimerWidget(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
-                        .background(SlateSurfaceLight)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -255,14 +255,14 @@ fun PomodoroTimerWidget(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.ExtraBold,
                             fontFamily = FontFamily.Monospace,
-                            color = EduTextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.testTag("pomodoro_time_display_compact")
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         LinearProgressIndicator(
                             progress = { animatedProgress },
                             color = selectedType.primaryColor,
-                            trackColor = SlateBorder,
+                            trackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                             modifier = Modifier
                                 .weight(1f)
                                 .height(6.dp)
@@ -312,7 +312,7 @@ fun PomodoroTimerWidget(
                             Icon(
                                 imageVector = Icons.Default.Refresh,
                                 contentDescription = "Reset",
-                                tint = EduTextSecondary
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -335,10 +335,10 @@ fun PomodoroTimerWidget(
                         }
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = if (isSelected) sessionType.primaryColor.copy(alpha = 0.12f) else SlateSurfaceLight,
+                            color = if (isSelected) sessionType.primaryColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceVariant,
                             border = BorderStroke(
                                 width = if (isSelected) 1.5.dp else 1.dp,
-                                color = if (isSelected) sessionType.primaryColor else SlateBorder
+                                color = if (isSelected) sessionType.primaryColor else MaterialTheme.colorScheme.outline
                             ),
                             modifier = Modifier
                                 .weight(1f)
@@ -354,7 +354,7 @@ fun PomodoroTimerWidget(
                                     text = sessionType.title,
                                     fontSize = 12.sp,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                    color = if (isSelected) sessionType.primaryColor else EduTextSecondary
+                                    color = if (isSelected) sessionType.primaryColor else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
@@ -372,7 +372,7 @@ fun PomodoroTimerWidget(
                 ) {
                     val strokeWidth = 10.dp
                     val ringColor = selectedType.primaryColor
-                    val trackColor = SlateBorder.copy(alpha = 0.6f)
+                    val trackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
 
                     Canvas(modifier = Modifier.size(150.dp)) {
                         val strokePx = strokeWidth.toPx()
@@ -421,7 +421,7 @@ fun PomodoroTimerWidget(
                             fontSize = 32.sp,
                             fontWeight = FontWeight.ExtraBold,
                             fontFamily = FontFamily.Monospace,
-                            color = EduTextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             letterSpacing = 1.sp,
                             modifier = Modifier.testTag("pomodoro_time_display")
                         )
@@ -429,7 +429,7 @@ fun PomodoroTimerWidget(
                         Text(
                             text = selectedType.iconDescription,
                             fontSize = 11.sp,
-                            color = EduTextMuted
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                         )
                     }
                 }
@@ -467,7 +467,7 @@ fun PomodoroTimerWidget(
                                     else
                                         "Break time over. Ready to start another focus block?",
                                     fontSize = 11.sp,
-                                    color = EduTextSecondary
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
@@ -599,8 +599,8 @@ fun PomodoroTimerWidget(
                         OutlinedButton(
                             onClick = { resetTimer() },
                             shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, SlateBorder),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = EduTextPrimary),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
                             modifier = Modifier
                                 .height(48.dp)
                                 .testTag("pomodoro_reset_button")
@@ -622,7 +622,7 @@ fun PomodoroTimerWidget(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
-                        .background(SlateSurfaceLight)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(horizontal = 10.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -636,7 +636,7 @@ fun PomodoroTimerWidget(
                     Text(
                         text = "Pro Tip: Silence phones and study one topic intensely without multitasking.",
                         fontSize = 11.sp,
-                        color = EduTextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

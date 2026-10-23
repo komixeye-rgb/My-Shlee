@@ -3,7 +3,7 @@ package com.example.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Modern Vibrant Education Design System (based on Education App UI Mockup)
-// Primary & Accent Brand Colors
+// Primary & Accent Brand Brand Colors (Shared across themes)
 val EduRoyalBlue = Color(0xFF4F46E5)       // Signature Education Royal Indigo for primary CTAs & headers
 val EduRoyalBlueDark = Color(0xFF3730A3)
 val EduRoyalBlueLight = Color(0xFF6366F1)
@@ -20,33 +20,39 @@ val EduSunnyAmberContainer = Color(0xFFD97706)
 
 val EduSkyCyan = Color(0xFF0EA5E9)
 
-// Clean Light Education Surface & Background Palette (Airy, crisp white & soft canvas)
-val EduCanvas = Color(0xFFF6F8FC)          // Soft clean light canvas background
-val EduSurface = Color(0xFFFFFFFF)         // Crisp pure white cards, dialogs & sheets
-val EduSurfaceVariant = Color(0xFFEEF2F6)  // Subtle light slate for input fills, pills & chip backgrounds
-val EduBorder = Color(0xFFE2E8F0)          // Clean crisp subtle border line
+// --- DAY MODE (High Contrast Light Palette) ---
+val DayCanvas = Color(0xFFF8FAFC)          // Crisp off-white canvas
+val DaySurface = Color(0xFFFFFFFF)         // Pure white cards
+val DaySurfaceVariant = Color(0xFFF1F5F9)  // Light gray variant
+val DayBorder = Color(0xFFE2E8F0)          // Subtle border
+val DayTextPrimary = Color(0xFF0F172A)     // Deep navy for sharp text
+val DayTextSecondary = Color(0xFF475569)   // Medium slate
+val DayTextMuted = Color(0xFF94A3B8)       // Light slate
 
-// High-Contrast Light Theme Typography (Readable dark slate)
-val EduTextPrimary = Color(0xFF1E293B)     // Deep rich slate primary typography
-val EduTextSecondary = Color(0xFF64748B)   // Neutral slate for descriptions, subtitles & metadata
-val EduTextMuted = Color(0xFF94A3B8)       // Tertiary slate for hints & footnotes
+// --- SLATE MODE (Deep Dark Palette) ---
+val SlateCanvas = Color(0xFF0B1120)        // Deep midnight navy
+val SlateSurface = Color(0xFF1E293B)       // Rich slate navy cards
+val SlateSurfaceVariant = Color(0xFF26354A) // Lighter slate for depth
+val SlateBorder = Color(0xFF334155)        // Slate gray border
+val SlateTextPrimary = Color(0xFFF8FAFC)   // Crisp white text
+val SlateTextSecondary = Color(0xFF94A3B8) // Muted slate text
+val SlateTextMuted = Color(0xFF64748B)     // Subdued slate text
 
-// Rank Badges
-val GoldBadge = Color(0xFFF59E0B)
-val SilverBadge = Color(0xFF94A3B8)
-val BronzeBadge = Color(0xFFD97706)
+// Legacy Semantic Tokens (Will be derived from active theme in Theme.kt)
+// These now serve as default values or dark mode defaults for backward compatibility
+val EduCanvas = SlateCanvas
+val EduSurface = SlateSurface
+val EduSurfaceVariant = SlateSurfaceVariant
+val EduBorder = SlateBorder
+val EduTextPrimary = SlateTextPrimary
+val EduTextSecondary = SlateTextSecondary
+val EduTextMuted = SlateTextMuted
 
-// Compatibility Semantic Tokens across all app components
-val SlateCanvas = EduCanvas
-val SlateSurface = EduSurface
-val SlateSurfaceLight = EduSurfaceVariant
-val SlateBorder = EduBorder
+val TextPrimary = Color.Unspecified // Replaced by MaterialTheme.colorScheme.onBackground
+val TextSecondary = Color.Unspecified
+val TextMuted = Color.Unspecified
 
-val TextPrimary = EduTextPrimary
-val TextSecondary = EduTextSecondary
-val TextMuted = EduTextMuted
-
-// Primary CTA / Tab color is Royal Indigo as shown in Education mockup
+// Brand Overrides
 val AmberPrimary = EduRoyalBlue
 val AmberLight = EduRoyalBlue
 val AmberDark = EduRoyalBlueDark
@@ -69,3 +75,14 @@ val SkyCyan = EduSkyCyan
 
 val ShuleeBlue = EduRoyalBlue
 val ShuleeBlueLight = EduRoyalBlueLight
+
+val FlameLightColor = EduCoralRose
+val FlameDarkColor = EduCoralDark
+
+// --- ADDED MISSING TOKENS ---
+val SlateSurfaceLight = Color(0xFF2D3748) // Lighter slate for nested cards
+val DaySurfaceLight = Color(0xFFEDF2F7)   // Lighter gray for day mode nested cards
+
+val GoldBadge = Color(0xFFFFD700)
+val SilverBadge = Color(0xFFC0C0C0)
+val BronzeBadge = Color(0xFFCD7F32)

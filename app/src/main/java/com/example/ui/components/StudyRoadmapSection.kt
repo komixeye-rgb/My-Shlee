@@ -46,8 +46,8 @@ fun StudyRoadmapSection(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(SlateSurface)
-            .border(1.dp, SlateBorder, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .padding(16.dp)
             .animateContentSize()
             .testTag("study_roadmap_section")
@@ -78,13 +78,13 @@ fun StudyRoadmapSection(
                     Text(
                         text = "UNEB Study Roadmap",
                         style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "National Exam Timetable & Revision Milestones",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp
                     )
                 }
@@ -117,11 +117,11 @@ fun StudyRoadmapSection(
                 val isSelected = selectedLevel.contains(levelOption.take(3), ignoreCase = true)
                 Surface(
                     onClick = { onLevelSelected(levelOption) },
-                    color = if (isSelected) EmeraldPrimary else SlateCanvas,
+                    color = if (isSelected) EmeraldPrimary else MaterialTheme.colorScheme.background,
                     shape = RoundedCornerShape(10.dp),
                     border = androidx.compose.foundation.BorderStroke(
                         1.dp,
-                        if (isSelected) EmeraldLight else SlateBorder
+                        if (isSelected) EmeraldLight else MaterialTheme.colorScheme.outline
                     ),
                     modifier = Modifier
                         .weight(1f)
@@ -134,7 +134,7 @@ fun StudyRoadmapSection(
                         Text(
                             text = levelOption.split(" ").first(),
                             style = MaterialTheme.typography.labelMedium,
-                            color = if (isSelected) Color.White else TextSecondary,
+                            color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                         )
                     }
@@ -146,7 +146,7 @@ fun StudyRoadmapSection(
 
         // Roadmap Progress & Countdown Banner
         Card(
-            colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
             shape = RoundedCornerShape(12.dp),
             border = androidx.compose.foundation.BorderStroke(1.dp, RoyalIndigo.copy(alpha = 0.4f)),
             modifier = Modifier.fillMaxWidth()
@@ -161,12 +161,12 @@ fun StudyRoadmapSection(
                         Text(
                             text = "Revision Progress",
                             style = MaterialTheme.typography.labelSmall,
-                            color = TextMuted
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                         )
                         Text(
                             text = "$completedCount of $totalCount Milestones Cleared",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -204,7 +204,7 @@ fun StudyRoadmapSection(
                         .height(8.dp)
                         .clip(RoundedCornerShape(4.dp)),
                     color = EmeraldLight,
-                    trackColor = SlateSurfaceLight,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             }
         }
@@ -269,7 +269,7 @@ private fun TimelineNodeItem(
                         .width(2.dp)
                         .height(150.dp)
                         .background(
-                            if (milestone.status == MilestoneStatus.COMPLETED) EmeraldLight.copy(alpha = 0.5f) else SlateBorder
+                            if (milestone.status == MilestoneStatus.COMPLETED) EmeraldLight.copy(alpha = 0.5f) else MaterialTheme.colorScheme.outline
                         )
                 )
             }
@@ -281,15 +281,15 @@ private fun TimelineNodeItem(
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = when (milestone.status) {
-                    MilestoneStatus.IN_PROGRESS -> SlateSurfaceLight
-                    MilestoneStatus.CRITICAL -> SlateSurfaceLight
-                    else -> SlateCanvas
+                    MilestoneStatus.IN_PROGRESS -> MaterialTheme.colorScheme.surfaceVariant
+                    MilestoneStatus.CRITICAL -> MaterialTheme.colorScheme.surfaceVariant
+                    else -> MaterialTheme.colorScheme.background
                 }
             ),
             shape = RoundedCornerShape(14.dp),
             border = androidx.compose.foundation.BorderStroke(
                 width = if (milestone.status == MilestoneStatus.IN_PROGRESS) 1.5.dp else 1.dp,
-                color = if (milestone.status == MilestoneStatus.IN_PROGRESS) AmberPrimary else SlateBorder
+                color = if (milestone.status == MilestoneStatus.IN_PROGRESS) AmberPrimary else MaterialTheme.colorScheme.outline
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -321,7 +321,7 @@ private fun TimelineNodeItem(
                             Text(
                                 text = "⏳ ${milestone.daysRemaining}d left",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (milestone.daysRemaining <= 15) CoralSalmon else TextSecondary,
+                                color = if (milestone.daysRemaining <= 15) CoralSalmon else MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 10.sp
                             )
@@ -343,12 +343,12 @@ private fun TimelineNodeItem(
                 Text(
                     text = milestone.title,
                     style = MaterialTheme.typography.titleSmall,
-                    color = TextPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.DateRange, contentDescription = null, tint = TextMuted, modifier = Modifier.size(12.dp))
+                    Icon(Icons.Default.DateRange, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), modifier = Modifier.size(12.dp))
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = milestone.dateLabel,
@@ -357,11 +357,11 @@ private fun TimelineNodeItem(
                         fontSize = 11.sp
                     )
                     if (milestone.unebRefCode != null) {
-                        Text(text = " • ", color = TextMuted)
+                        Text(text = " • ", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                         Text(
                             text = milestone.unebRefCode,
                             style = MaterialTheme.typography.labelSmall,
-                            color = TextMuted,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             fontSize = 10.sp
                         )
                     }
@@ -372,7 +372,7 @@ private fun TimelineNodeItem(
                 Text(
                     text = milestone.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp
                 )
 
@@ -382,7 +382,7 @@ private fun TimelineNodeItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
-                            .background(SlateCanvas.copy(alpha = 0.6f))
+                            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6f))
                             .padding(8.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
@@ -399,7 +399,7 @@ private fun TimelineNodeItem(
                                 Text(
                                     text = tip,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = TextSecondary,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontSize = 11.sp
                                 )
                             }

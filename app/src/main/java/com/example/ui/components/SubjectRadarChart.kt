@@ -157,7 +157,7 @@ fun SubjectRadarChartSection(
                     }
                 }
 
-                Divider(modifier = Modifier.padding(vertical = 12.dp), color = SlateBorder)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = SlateBorder)
             }
         }
 

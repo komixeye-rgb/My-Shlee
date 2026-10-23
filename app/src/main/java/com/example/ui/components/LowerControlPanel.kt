@@ -39,9 +39,9 @@ fun LowerControlPanel(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = SlateSurface,
+        color = MaterialTheme.colorScheme.surface,
         tonalElevation = 8.dp,
-        border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         modifier = modifier
             .fillMaxWidth()
@@ -57,8 +57,8 @@ fun LowerControlPanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(SlateCanvas)
-                    .border(1.dp, SlateBorder.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.background)
+                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
                     .padding(horizontal = 10.dp, vertical = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -70,7 +70,7 @@ fun LowerControlPanel(
                     Text(
                         text = "Goal: ${userProfile.dailyQuizCompleted}/${userProfile.dailyQuizGoal}",
                         fontSize = 11.sp,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -124,7 +124,7 @@ fun LowerControlPanel(
             // Navigation Bar with 4 Tabs
             NavigationBar(
                 containerColor = Color.Transparent,
-                contentColor = TextSecondary,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 tonalElevation = 0.dp,
                 modifier = Modifier.height(56.dp)
             ) {
@@ -141,8 +141,8 @@ fun LowerControlPanel(
                         selectedIconColor = AmberPrimary,
                         selectedTextColor = AmberPrimary,
                         indicatorColor = AmberPrimary.copy(alpha = 0.15f),
-                        unselectedIconColor = TextSecondary,
-                        unselectedTextColor = TextSecondary
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     modifier = Modifier.testTag("nav_item_radar")
                 )
@@ -151,74 +151,74 @@ fun LowerControlPanel(
                     selected = activeTab == 1,
                     onClick = { onTabSelected(1) },
                     icon = {
-                        Icon(Icons.Default.School, contentDescription = "Study Roadmap", modifier = Modifier.size(18.dp))
+                        Icon(Icons.Default.Alarm, contentDescription = "Focus & Goals", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Roadmap", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
+                        Text("Focus & Goals", fontSize = 9.sp, fontWeight = if (activeTab == 1) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = EmeraldLight,
-                        selectedTextColor = EmeraldLight,
-                        indicatorColor = EmeraldLight.copy(alpha = 0.18f),
-                        unselectedIconColor = TextSecondary,
-                        unselectedTextColor = TextSecondary
+                        selectedIconColor = AmberPrimary,
+                        selectedTextColor = AmberPrimary,
+                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
-                    modifier = Modifier.testTag("nav_item_roadmap")
+                    modifier = Modifier.testTag("nav_item_goals")
                 )
 
                 NavigationBarItem(
                     selected = activeTab == 2,
                     onClick = { onTabSelected(2) },
                     icon = {
-                        Icon(Icons.Default.EmojiEvents, contentDescription = "Leaderboard", modifier = Modifier.size(18.dp))
+                        Icon(Icons.Default.School, contentDescription = "Study Roadmap", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
+                        Text("Roadmap", fontSize = 9.sp, fontWeight = if (activeTab == 2) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = AmberPrimary,
-                        selectedTextColor = AmberPrimary,
-                        indicatorColor = AmberPrimary.copy(alpha = 0.15f),
-                        unselectedIconColor = TextSecondary,
-                        unselectedTextColor = TextSecondary
+                        selectedIconColor = EmeraldLight,
+                        selectedTextColor = EmeraldLight,
+                        indicatorColor = EmeraldLight.copy(alpha = 0.18f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
-                    modifier = Modifier.testTag("nav_item_leaderboard")
+                    modifier = Modifier.testTag("nav_item_roadmap")
                 )
 
                 NavigationBarItem(
                     selected = activeTab == 3,
                     onClick = { onTabSelected(3) },
                     icon = {
-                        Icon(Icons.Default.Alarm, contentDescription = "Daily Goals", modifier = Modifier.size(18.dp))
+                        Icon(Icons.Default.EmojiEvents, contentDescription = "Leaderboard", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Daily Goals", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
+                        Text("Leaderboard", fontSize = 9.sp, fontWeight = if (activeTab == 3) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
                         selectedTextColor = AmberPrimary,
                         indicatorColor = AmberPrimary.copy(alpha = 0.15f),
-                        unselectedIconColor = TextSecondary,
-                        unselectedTextColor = TextSecondary
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
-                    modifier = Modifier.testTag("nav_item_goals")
+                    modifier = Modifier.testTag("nav_item_leaderboard")
                 )
 
                 NavigationBarItem(
                     selected = activeTab == 4,
                     onClick = { onTabSelected(4) },
                     icon = {
-                        Icon(Icons.Default.Payments, contentDescription = "Payments", modifier = Modifier.size(18.dp))
+                        Icon(Icons.Default.Payments, contentDescription = "Pricing & Plans", modifier = Modifier.size(18.dp))
                     },
                     label = {
-                        Text("Payments", fontSize = 9.sp, fontWeight = if (activeTab == 4) FontWeight.Bold else FontWeight.Normal)
+                        Text("Plans", fontSize = 9.sp, fontWeight = if (activeTab == 4) FontWeight.Bold else FontWeight.Normal)
                     },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = AmberPrimary,
                         selectedTextColor = AmberPrimary,
                         indicatorColor = AmberPrimary.copy(alpha = 0.15f),
-                        unselectedIconColor = TextSecondary,
-                        unselectedTextColor = TextSecondary
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     modifier = Modifier.testTag("nav_item_payments")
                 )

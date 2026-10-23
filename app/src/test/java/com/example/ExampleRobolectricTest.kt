@@ -40,4 +40,11 @@ class ExampleRobolectricTest {
     val updatedSessions = viewModel.userProfile.value.focusSessionsCompleted
     assertEquals(initialSessions + 1, updatedSessions)
   }
+
+  @Test
+  fun `verify candidate level update changes profile level successfully`() {
+    val viewModel = com.example.ui.StudentDashboardViewModel()
+    viewModel.updateCandidateLevel("PLE (Primary 7)")
+    assertEquals("PLE (Primary 7)", viewModel.userProfile.value.candidateLevel)
+  }
 }

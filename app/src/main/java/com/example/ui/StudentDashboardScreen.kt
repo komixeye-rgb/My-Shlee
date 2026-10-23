@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,7 +18,7 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.QrCode
@@ -25,6 +26,8 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Timeline
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -66,6 +69,7 @@ fun StudentDashboardScreen(
     val isSupabaseConnected by viewModel.isSupabaseConnected.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val syncStatusMessage by viewModel.syncStatusMessage.collectAsStateWithLifecycle()
+    val isDarkMode by viewModel.isDarkMode.collectAsStateWithLifecycle()
 
     var activeTab by remember { mutableIntStateOf(0) } // 0 = Radar, 1 = Roadmap, 2 = Leaderboard, 3 = Daily Goals, 4 = Payments
     var selectedRoadmapLevel by remember { mutableStateOf(userProfile.candidateLevel) }
@@ -84,9 +88,9 @@ fun StudentDashboardScreen(
         topBar = {
             // Expanded Upper Control Panel with lowered controls and vertical padding
             Surface(
-                color = SlateSurface,
+                color = MaterialTheme.colorScheme.surface,
                 tonalElevation = 6.dp,
-                border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(72.dp)
@@ -112,7 +116,7 @@ fun StudentDashboardScreen(
                         Text(
                             text = "Shlee Dashboard",
                             style = MaterialTheme.typography.titleMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -122,6 +126,17 @@ fun StudentDashboardScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        IconButton(
+                            onClick = { viewModel.toggleTheme() },
+                            modifier = Modifier.testTag("theme_toggle_button")
+                        ) {
+                            Icon(
+                                imageVector = if (isDarkMode) Icons.Default.WbSunny else Icons.Default.NightsStay,
+                                contentDescription = "Toggle Theme",
+                                tint = if (isDarkMode) SunnyAmber else EduRoyalBlue
+                            )
+                        }
+
                         Button(
                             onClick = { showShareModal = true },
                             colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
@@ -139,7 +154,7 @@ fun StudentDashboardScreen(
                             onClick = { showAuthModal = true },
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = if (isLoggedIn) SlateSurfaceLight else AmberPrimary.copy(alpha = 0.15f),
+                                containerColor = if (isLoggedIn) MaterialTheme.colorScheme.surfaceVariant else AmberPrimary.copy(alpha = 0.15f),
                                 contentColor = if (isLoggedIn) EmeraldLight else AmberLight
                             ),
                             border = androidx.compose.foundation.BorderStroke(
@@ -150,7 +165,7 @@ fun StudentDashboardScreen(
                             modifier = Modifier.testTag("auth_login_header_button")
                         ) {
                             Icon(
-                                imageVector = if (isLoggedIn) Icons.Default.AccountCircle else Icons.Default.Login,
+                                imageVector = if (isLoggedIn) Icons.Default.AccountCircle else Icons.AutoMirrored.Filled.Login,
                                 contentDescription = "Auth",
                                 modifier = Modifier.size(16.dp)
                             )
@@ -182,7 +197,7 @@ fun StudentDashboardScreen(
                 }
             )
         },
-        containerColor = SlateCanvas,
+        containerColor = MaterialTheme.colorScheme.background,
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
         Column(
@@ -206,22 +221,10 @@ fun StudentDashboardScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Pomodoro Study Timer Widget at top of dashboard
-            PomodoroTimerWidget(
-                completedSessions = userProfile.focusSessionsCompleted,
-                onSessionCompleted = { sessionType ->
-                    if (sessionType == PomodoroSessionType.FOCUS_25) {
-                        viewModel.recordCompletedPomodoroSession(25)
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Navigation Tabs with smooth selection transitions (5 Tabs)
+            // Navigation Tabs with smooth selection transitions (5 Organized Functional Domains)
             ScrollableTabRow(
                 selectedTabIndex = activeTab,
-                containerColor = SlateSurface,
+                containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = AmberPrimary,
                 edgePadding = 0.dp,
                 indicator = { tabPositions ->
@@ -235,7 +238,7 @@ fun StudentDashboardScreen(
                 },
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
-                    .border(1.dp, SlateBorder, RoundedCornerShape(12.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
             ) {
                 Tab(
                     selected = activeTab == 0,
@@ -244,11 +247,11 @@ fun StudentDashboardScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.PieChart, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("Radar & Mastery", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            Text("Mastery", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     },
                     selectedContentColor = AmberPrimary,
-                    unselectedContentColor = TextSecondary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("tab_radar_overview")
                 )
 
@@ -257,19 +260,34 @@ fun StudentDashboardScreen(
                     onClick = { activeTab = 1 },
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Focus & Goals", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        }
+                    },
+                    selectedContentColor = AmberPrimary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.testTag("tab_focus_goals")
+                )
+
+                Tab(
+                    selected = activeTab == 2,
+                    onClick = { activeTab = 2 },
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.School, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(6.dp))
                             Text("Roadmap", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     },
                     selectedContentColor = EmeraldLight,
-                    unselectedContentColor = TextSecondary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("tab_study_roadmap")
                 )
 
                 Tab(
-                    selected = activeTab == 2,
-                    onClick = { activeTab = 2 },
+                    selected = activeTab == 3,
+                    onClick = { activeTab = 3 },
                     text = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.EmojiEvents, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -278,23 +296,8 @@ fun StudentDashboardScreen(
                         }
                     },
                     selectedContentColor = AmberPrimary,
-                    unselectedContentColor = TextSecondary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("tab_leaderboard")
-                )
-
-                Tab(
-                    selected = activeTab == 3,
-                    onClick = { activeTab = 3 },
-                    text = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text("Daily Goals", fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                        }
-                    },
-                    selectedContentColor = AmberPrimary,
-                    unselectedContentColor = TextSecondary,
-                    modifier = Modifier.testTag("tab_daily_goals")
                 )
 
                 Tab(
@@ -304,11 +307,11 @@ fun StudentDashboardScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.Payments, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("Payments", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            Text("Plans & Help", fontWeight = FontWeight.Bold, fontSize = 12.sp)
                         }
                     },
                     selectedContentColor = AmberPrimary,
-                    unselectedContentColor = TextSecondary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("tab_payments")
                 )
             }
@@ -334,6 +337,56 @@ fun StudentDashboardScreen(
                 when (targetTab) {
                     0 -> {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            // Quick Focus Session Launch Bar
+                            Card(
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                shape = RoundedCornerShape(12.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.35f)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { activeTab = 1 }
+                                    .testTag("quick_focus_bar")
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text("⏱️", fontSize = 18.sp)
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Column {
+                                            Text(
+                                                text = "Pomodoro Study Session (25 min)",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.onSurface
+                                            )
+                                            Text(
+                                                text = "${userProfile.focusSessionsCompleted} completed today • Tap to launch focus timer",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                fontSize = 11.sp
+                                            )
+                                        }
+                                    }
+                                    Surface(
+                                        color = AmberPrimary,
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {
+                                        Text(
+                                            text = "Start Timer ➜",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = Color.White,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                        )
+                                    }
+                                }
+                            }
+
                             SubjectRadarChartSection(
                                 subjectScores = subjectScores,
                                 onPracticeSubject = { selectedPracticeSubject = it },
@@ -349,6 +402,26 @@ fun StudentDashboardScreen(
                     }
 
                     1 -> {
+                        // Focus & Goals Domain
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            PomodoroTimerWidget(
+                                completedSessions = userProfile.focusSessionsCompleted,
+                                onSessionCompleted = { sessionType ->
+                                    if (sessionType == PomodoroSessionType.FOCUS_25) {
+                                        viewModel.recordCompletedPomodoroSession(25)
+                                    }
+                                }
+                            )
+
+                            NotificationSettingsCard(
+                                userProfile = userProfile,
+                                onToggleNotification = { viewModel.toggleNotification(it) },
+                                onReminderTimeChanged = { viewModel.updateReminderTime(it) }
+                            )
+                        }
+                    }
+
+                    2 -> {
                         StudyRoadmapSection(
                             userProfile = userProfile,
                             milestones = currentMilestones,
@@ -363,19 +436,11 @@ fun StudentDashboardScreen(
                         )
                     }
 
-                    2 -> {
+                    3 -> {
                         NationalLeaderboardSection(
                             candidates = leaderboardCandidates,
                             selectedLevelFilter = selectedFilter,
                             onFilterChanged = { viewModel.updateLevelFilter(it) }
-                        )
-                    }
-
-                    3 -> {
-                        NotificationSettingsCard(
-                            userProfile = userProfile,
-                            onToggleNotification = { viewModel.toggleNotification(it) },
-                            onReminderTimeChanged = { viewModel.updateReminderTime(it) }
                         )
                     }
 
@@ -479,9 +544,9 @@ private fun WelcomeHeaderCard(
     onShareClick: () -> Unit
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = SlateSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(16.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
@@ -509,7 +574,7 @@ private fun WelcomeHeaderCard(
                         Text(
                             text = "Candidate ${userProfile.name}",
                             style = MaterialTheme.typography.titleMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -530,7 +595,7 @@ private fun WelcomeHeaderCard(
                         Text(
                             text = "Index: ${userProfile.studentId}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 11.sp
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -588,7 +653,7 @@ private fun WelcomeHeaderCard(
                 color = when (isSupabaseConnected) {
                     true -> EmeraldDistinct.copy(alpha = 0.15f)
                     false -> FlameOrange.copy(alpha = 0.15f)
-                    else -> SlateSurfaceLight
+                    else -> MaterialTheme.colorScheme.surfaceVariant
                 },
                 shape = RoundedCornerShape(8.dp),
                 border = androidx.compose.foundation.BorderStroke(
@@ -596,7 +661,7 @@ private fun WelcomeHeaderCard(
                     when (isSupabaseConnected) {
                         true -> EmeraldLight.copy(alpha = 0.35f)
                         false -> FlameOrange.copy(alpha = 0.35f)
-                        else -> SlateBorder
+                        else -> MaterialTheme.colorScheme.outline
                     }
                 ),
                 modifier = Modifier.testTag("supabase_sync_status_chip")
@@ -622,7 +687,7 @@ private fun WelcomeHeaderCard(
                             tint = when (isSupabaseConnected) {
                                 true -> EmeraldLight
                                 false -> FlameLight
-                                else -> TextSecondary
+                                else -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             modifier = Modifier.size(13.dp)
                         )
@@ -634,7 +699,7 @@ private fun WelcomeHeaderCard(
                         color = when (isSupabaseConnected) {
                             true -> EmeraldLight
                             false -> FlameLight
-                            else -> TextSecondary
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
                         },
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium
@@ -643,7 +708,7 @@ private fun WelcomeHeaderCard(
                     Text(
                         text = "• Tap to sync",
                         style = MaterialTheme.typography.labelSmall,
-                        color = TextSecondary.copy(alpha = 0.7f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         fontSize = 9.sp
                     )
                 }

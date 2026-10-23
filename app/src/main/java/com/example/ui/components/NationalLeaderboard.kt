@@ -51,8 +51,8 @@ fun NationalLeaderboardSection(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(SlateSurface)
-            .border(1.dp, SlateBorder, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         // Section Title
@@ -68,14 +68,14 @@ fun NationalLeaderboardSection(
                     Text(
                         text = "Ugandan National Leaderboard",
                         style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Text(
                     text = "Ranked by UNEB Accuracy + Continuous Study Streak",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -96,13 +96,13 @@ fun NationalLeaderboardSection(
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = AmberPrimary,
                         selectedLabelColor = Color.White,
-                        containerColor = SlateSurfaceLight,
-                        labelColor = TextSecondary
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     border = FilterChipDefaults.filterChipBorder(
                         enabled = true,
                         selected = isSelected,
-                        borderColor = SlateBorder,
+                        borderColor = MaterialTheme.colorScheme.outline,
                         selectedBorderColor = AmberPrimary
                     ),
                     modifier = Modifier.testTag("filter_chip_$level")
@@ -139,11 +139,11 @@ fun NationalLeaderboardSection(
                 .padding(horizontal = 8.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Rank & Candidate", style = MaterialTheme.typography.labelSmall, color = TextMuted)
-            Text("Accuracy / Streak / Points", style = MaterialTheme.typography.labelSmall, color = TextMuted)
+            Text("Rank & Candidate", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
+            Text("Accuracy / Streak / Points", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
         }
 
-        Divider(color = SlateBorder, thickness = 1.dp)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
 
         // Scrollable Rankings List
         LazyColumn(
@@ -199,7 +199,7 @@ private fun PodiumCard(
         Text(
             text = candidate.candidateName,
             style = MaterialTheme.typography.labelMedium,
-            color = TextPrimary,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             maxLines = 1
@@ -208,7 +208,7 @@ private fun PodiumCard(
         Text(
             text = candidate.schoolName,
             style = MaterialTheme.typography.labelSmall,
-            color = TextMuted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center,
             fontSize = 9.sp,
             maxLines = 1
@@ -238,7 +238,7 @@ private fun PodiumCard(
                 Text(
                     text = "🔥 ${candidate.streakDays}d streak",
                     style = MaterialTheme.typography.labelSmall,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 9.sp
                 )
             }
@@ -248,7 +248,7 @@ private fun PodiumCard(
 
 @Composable
 private fun CandidateRankRow(candidate: LeaderboardCandidate) {
-    val rowBg = if (candidate.isCurrentUser) AmberPrimary.copy(alpha = 0.15f) else SlateSurfaceLight
+    val rowBg = if (candidate.isCurrentUser) AmberPrimary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant
     val borderStroke = if (candidate.isCurrentUser) androidx.compose.foundation.BorderStroke(1.5.dp, AmberPrimary) else null
 
     Card(
@@ -271,7 +271,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                 Text(
                     text = "#${candidate.rank}",
                     style = MaterialTheme.typography.titleSmall,
-                    color = if (candidate.isCurrentUser) AmberLight else TextPrimary,
+                    color = if (candidate.isCurrentUser) AmberLight else MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.width(32.dp)
                 )
@@ -291,7 +291,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                         }
                     }
                     else -> {
-                        Icon(Icons.Default.Remove, contentDescription = null, tint = TextMuted, modifier = Modifier.size(12.dp))
+                        Icon(Icons.Default.Remove, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f), modifier = Modifier.size(12.dp))
                     }
                 }
 
@@ -302,7 +302,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(if (candidate.isCurrentUser) AmberPrimary else SlateBorder),
+                        .background(if (candidate.isCurrentUser) AmberPrimary else MaterialTheme.colorScheme.outline),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -320,7 +320,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                         Text(
                             text = candidate.candidateName,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
                         )
                         if (candidate.isCurrentUser) {
@@ -339,7 +339,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                     Text(
                         text = "${candidate.schoolName} (${candidate.candidateLevel})",
                         style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp
                     )
                 }
@@ -356,7 +356,7 @@ private fun CandidateRankRow(candidate: LeaderboardCandidate) {
                 Text(
                     text = "${candidate.quizAccuracyPct.toInt()}% Acc • 🔥${candidate.streakDays}d",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     fontSize = 11.sp
                 )
             }
