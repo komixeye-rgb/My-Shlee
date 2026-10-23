@@ -1,6 +1,6 @@
 {
   "name": "Shlee Student Dashboard",
-  "description": "Ugandan UNEB examination prep hub with interactive subject radar analytics, national candidate leaderboard, client-side QR profile sharing, daily study goals, and Gemini High-Thinking AI revision tutor.",
+  "description": "Comprehensive UNEB examination revision platform featuring interactive subject radar mastery, Pomodoro focus study timer, national exam roadmap, live candidate leaderboard, and AI Revision Tutor.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

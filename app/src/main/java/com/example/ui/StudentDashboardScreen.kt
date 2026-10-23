@@ -498,6 +498,14 @@ private fun WelcomeHeaderCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_shulee_logo),
+                            contentDescription = "Candidate Badge",
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "Candidate ${userProfile.name}",
                             style = MaterialTheme.typography.titleMedium,

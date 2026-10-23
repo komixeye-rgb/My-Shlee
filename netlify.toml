@@ -1,0 +1,17 @@
+# Netlify Configuration for Shlee Student Dashboard
+[build]
+  publish = "."
+  # No build command needed - static web hub and API explorer
+  command = ""
+
+[[redirects]]
+  from = "/assets/*"
+  to = "/public/assets/:splat"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Cache-Control = "public, max-age=0, must-revalidate"

@@ -29,7 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Dialog
+import com.example.R
 import com.example.model.UserProfile
 import com.example.ui.theme.*
 import com.example.util.QrCodeGenerator
@@ -143,6 +145,14 @@ fun ProfileShareModal(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_shulee_logo),
+                                contentDescription = "Graduation Cap Logo",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(RoundedCornerShape(6.dp))
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = userProfile.name,
                                 style = MaterialTheme.typography.titleMedium,

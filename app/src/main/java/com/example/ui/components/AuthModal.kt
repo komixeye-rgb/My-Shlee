@@ -6,15 +6,17 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,11 +25,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.R
 import com.example.ui.theme.*
 
 @Composable
@@ -40,9 +44,13 @@ fun AuthModal(
 ) {
     val context = LocalContext.current
     var isSignUp by remember { mutableStateOf(false) }
+    var selectedLevel by remember { mutableStateOf("Secondary (UCE/UACE)") } // or "Primary (PLE)"
     var studentNameInput by remember { mutableStateOf("") }
+    var schoolNameInput by remember { mutableStateOf("") }
     var unebCenterInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }
+
+    val scrollState = rememberScrollState()
 
     Dialog(onDismissRequest = onDismiss) {
         AnimatedVisibility(
@@ -56,13 +64,14 @@ fun AuthModal(
                 border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp)
+                    .padding(8.dp)
                     .testTag("auth_modal_dialog")
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(22.dp),
+                        .padding(20.dp)
+                        .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Header
@@ -72,15 +81,13 @@ fun AuthModal(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_shulee_logo),
+                                contentDescription = "Shlee Graduation Logo",
                                 modifier = Modifier
                                     .size(36.dp)
-                                    .clip(CircleShape)
-                                    .background(AmberPrimary.copy(alpha = 0.2f)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(Icons.Default.AccountCircle, contentDescription = null, tint = AmberLight)
-                            }
+                                    .clip(RoundedCornerShape(8.dp))
+                            )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = if (isLoggedIn) "Student Profile" else if (isSignUp) "Create Candidate Account" else "Candidate Sign In",
@@ -95,21 +102,52 @@ fun AuthModal(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     if (isLoggedIn) {
                         // Logged in state view
-                        Text(
-                            text = "Logged in as $currentStudentName",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = TextPrimary,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "UNEB Center 2026 • Verified Candidate",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary
-                        )
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = SlateCanvas),
+                            shape = RoundedCornerShape(12.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, SlateBorder),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Surface(
+                                    color = AmberPrimary.copy(alpha = 0.2f),
+                                    shape = CircleShape,
+                                    modifier = Modifier.size(56.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Text("👤", fontSize = 28.sp)
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = currentStudentName,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = TextPrimary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = "UNEB Center 2026 • Verified Candidate",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = EmeraldLight
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Surface(
+                                    color = SlateSurface,
+                                    shape = RoundedCornerShape(8.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Column(modifier = Modifier.padding(10.dp)) {
+                                        Text("🎁 Free Trial Status: Active", color = EmeraldLight, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                        Text("• 1 Daily Quiz / Subject: Guaranteed Forever", color = TextSecondary, fontSize = 10.sp)
+                                        Text("• National Leaderboard: Active", color = TextSecondary, fontSize = 10.sp)
+                                    }
+                                }
+                            }
+                        }
 
                         Spacer(modifier = Modifier.height(20.dp))
 
@@ -128,12 +166,66 @@ fun AuthModal(
                             Text("Sign Out", fontWeight = FontWeight.Bold)
                         }
                     } else {
+                        // Level Selection Toggle (Primary PLE vs Secondary UCE/UACE)
+                        Text(
+                            text = "Select Candidate Education Level:",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = TextSecondary,
+                            modifier = Modifier.align(Alignment.Start)
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(SlateCanvas, RoundedCornerShape(10.dp))
+                                .padding(4.dp)
+                        ) {
+                            val isPrimary = selectedLevel.startsWith("Primary")
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(if (isPrimary) AmberPrimary else Color.Transparent)
+                                    .clickable { selectedLevel = "Primary (PLE)" }
+                                    .padding(vertical = 8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "🎒 Primary (PLE)",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isPrimary) Color.White else TextSecondary
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(if (!isPrimary) AmberPrimary else Color.Transparent)
+                                    .clickable { selectedLevel = "Secondary (UCE/UACE)" }
+                                    .padding(vertical = 8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "🎓 Secondary (UCE)",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (!isPrimary) Color.White else TextSecondary
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(14.dp))
+
                         // Sign In / Sign Up Form
                         if (isSignUp) {
                             OutlinedTextField(
                                 value = studentNameInput,
                                 onValueChange = { studentNameInput = it },
                                 label = { Text("Candidate Full Name") },
+                                placeholder = { Text("e.g. Kato Ivan") },
                                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = AmberLight) },
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedBorderColor = AmberPrimary,
@@ -148,12 +240,33 @@ fun AuthModal(
                             )
 
                             Spacer(modifier = Modifier.height(10.dp))
+
+                            OutlinedTextField(
+                                value = schoolNameInput,
+                                onValueChange = { schoolNameInput = it },
+                                label = { Text("School Name") },
+                                placeholder = { Text("e.g. King's College Budo / Namagunga") },
+                                leadingIcon = { Icon(Icons.Default.School, contentDescription = null, tint = AmberLight) },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = AmberPrimary,
+                                    unfocusedBorderColor = SlateBorder,
+                                    focusedTextColor = TextPrimary,
+                                    unfocusedTextColor = TextPrimary
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .testTag("auth_school_input")
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
                         }
 
                         OutlinedTextField(
                             value = unebCenterInput,
                             onValueChange = { unebCenterInput = it },
                             label = { Text("UNEB Center / Student Index No.") },
+                            placeholder = { Text("e.g. U0041/502 or PLE-2026") },
                             leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = null, tint = AmberLight) },
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = AmberPrimary,
@@ -172,7 +285,7 @@ fun AuthModal(
                         OutlinedTextField(
                             value = passwordInput,
                             onValueChange = { passwordInput = it },
-                            label = { Text("Password") },
+                            label = { Text("Password / PIN") },
                             leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = AmberLight) },
                             visualTransformation = PasswordVisualTransformation(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -187,13 +300,41 @@ fun AuthModal(
                                 .testTag("auth_password_input")
                         )
 
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Free Guarantee Banner
+                        Surface(
+                            color = EmeraldLight.copy(alpha = 0.12f),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, EmeraldLight.copy(alpha = 0.3f)),
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("🎁", fontSize = 14.sp)
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "Includes 7-Day Full Trial + 1 Free Quiz per subject forever!",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = EmeraldLight,
+                                    fontSize = 10.sp
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         Button(
                             onClick = {
-                                val name = if (isSignUp && studentNameInput.isNotBlank()) studentNameInput else "Kato Ivan"
+                                val name = if (isSignUp && studentNameInput.isNotBlank()) studentNameInput else if (unebCenterInput.isNotBlank()) unebCenterInput else "Kato Ivan"
                                 onLoginSuccess(name)
-                                Toast.makeText(context, "Welcome back, $name!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    if (isSignUp) "Account created for $name ($selectedLevel)!" else "Signed in successfully!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 onDismiss()
                             },
                             colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
@@ -203,18 +344,21 @@ fun AuthModal(
                                 .testTag("submit_auth_button")
                         ) {
                             Text(
-                                text = if (isSignUp) "Create Account & Sign In" else "Sign In",
+                                text = if (isSignUp) "Create Account & Start Free ➜" else "Sign In ➜",
                                 fontWeight = FontWeight.Bold
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                        TextButton(onClick = { isSignUp = !isSignUp }) {
+                        TextButton(
+                            onClick = { isSignUp = !isSignUp },
+                            modifier = Modifier.testTag("toggle_signup_mode")
+                        ) {
                             Text(
-                                text = if (isSignUp) "Already have an account? Sign In" else "New UNEB Candidate? Sign Up",
+                                text = if (isSignUp) "Already have an account? Sign In" else "New UNEB Candidate? Create Free Account",
                                 color = AmberLight,
-                                fontSize = 12.sp
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
