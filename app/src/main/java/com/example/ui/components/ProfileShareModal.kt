@@ -13,13 +13,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -28,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.FileProvider
 import com.example.model.UserProfile
 import com.example.ui.theme.*
 import com.example.util.QrCodeGenerator
@@ -39,10 +40,19 @@ fun ProfileShareModal(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    val shareUrl = "https://shulee.ug/student/card/${userProfile.studentId}"
 
-    val qrBitmap = remember(shareUrl) {
-        QrCodeGenerator.generateQrBitmap(shareUrl, sizePx = 600)
+    // Generate scannable QR payload containing student's unique index number and current study streak
+    val qrPayload = remember(userProfile.studentId, userProfile.currentStreak, userProfile.name) {
+        QrCodeGenerator.buildStudentVerificationPayload(
+            studentIndex = userProfile.studentId,
+            streakDays = userProfile.currentStreak,
+            studentName = userProfile.name
+        )
+    }
+
+    // Generate real scannable QR Bitmap using ZXing library
+    val qrBitmap = remember(qrPayload) {
+        QrCodeGenerator.generateQrBitmap(qrPayload, sizePx = 600)
     }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -67,12 +77,21 @@ fun ProfileShareModal(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Share Revision Badge",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.QrCodeScanner,
+                            contentDescription = null,
+                            tint = AmberLight,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Student Pass & QR Code",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = TextPrimary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     IconButton(
                         onClick = onDismiss,
                         modifier = Modifier.testTag("close_qr_modal")
@@ -81,28 +100,37 @@ fun ProfileShareModal(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Scannable student badge with unique Index & Study Streak",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextSecondary,
+                    fontSize = 11.sp,
+                    modifier = Modifier.align(Alignment.Start)
+                )
 
-                // High-Contrast SVG/Bitmap QR Matrix
+                Spacer(modifier = Modifier.height(14.dp))
+
+                // High-Contrast ZXing-Generated QR Matrix
                 Box(
                     modifier = Modifier
-                        .size(200.dp)
+                        .size(210.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(androidx.compose.ui.graphics.Color.White)
+                        .background(Color.White)
                         .border(2.dp, AmberPrimary, RoundedCornerShape(16.dp))
-                        .padding(12.dp),
+                        .padding(12.dp)
+                        .testTag("student_qr_code_image"),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         bitmap = qrBitmap.asImageBitmap(),
-                        contentDescription = "Student Verification QR Code",
+                        contentDescription = "Candidate Verification QR Code (Index: ${userProfile.studentId}, Streak: ${userProfile.currentStreak} Days)",
                         modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                // Candidate Badge Card
+                // Candidate Details Card with Index & Streak
                 Card(
                     colors = CardDefaults.cardColors(containerColor = SlateSurfaceLight),
                     shape = RoundedCornerShape(12.dp),
@@ -114,12 +142,16 @@ fun ProfileShareModal(
                             .padding(14.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = userProfile.name,
-                            style = MaterialTheme.typography.titleLarge,
-                            color = TextPrimary,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = userProfile.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = TextPrimary,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(Icons.Default.Verified, contentDescription = "Verified", tint = EmeraldLight, modifier = Modifier.size(16.dp))
+                        }
                         Text(
                             text = "${userProfile.school} • ${userProfile.candidateLevel}",
                             style = MaterialTheme.typography.bodySmall,
@@ -133,14 +165,25 @@ fun ProfileShareModal(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            BadgeStatPill("Streak", "🔥 ${userProfile.currentStreak} Days", FlameOrange)
-                            BadgeStatPill("Avg Score", "${userProfile.averageScore.toInt()}%", EmeraldLight)
-                            BadgeStatPill("UNEB Target", userProfile.projectedAggregate, AmberLight)
+                            BadgeStatPill("INDEX NO.", userProfile.studentId, AmberLight)
+                            BadgeStatPill("CURRENT STREAK", "🔥 ${userProfile.currentStreak} Days", FlameOrange)
+                            BadgeStatPill("TARGET", userProfile.projectedAggregate, EmeraldLight)
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Scan Instruction Note
+                Text(
+                    text = "Scan with any phone camera or barcode app to view verified candidate credentials and streak.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextMuted,
+                    fontSize = 10.sp,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Action Buttons
                 Row(
@@ -149,7 +192,7 @@ fun ProfileShareModal(
                 ) {
                     OutlinedButton(
                         onClick = {
-                            copyToClipboard(context, shareUrl)
+                            copyToClipboard(context, qrPayload)
                         },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = AmberLight),
@@ -159,12 +202,12 @@ fun ProfileShareModal(
                     ) {
                         Icon(Icons.Default.ContentCopy, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Copy Link", style = MaterialTheme.typography.labelMedium)
+                        Text("Copy Info", style = MaterialTheme.typography.labelMedium)
                     }
 
                     Button(
                         onClick = {
-                            shareQrCode(context, userProfile, shareUrl)
+                            shareQrCode(context, userProfile, qrPayload)
                         },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = AmberPrimary),
@@ -183,29 +226,29 @@ fun ProfileShareModal(
 }
 
 @Composable
-private fun BadgeStatPill(label: String, value: String, valueColor: androidx.compose.ui.graphics.Color) {
+private fun BadgeStatPill(label: String, value: String, valueColor: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = label, style = MaterialTheme.typography.labelSmall, color = TextMuted)
+        Text(text = label, style = MaterialTheme.typography.labelSmall, color = TextMuted, fontSize = 9.sp)
         Text(text = value, style = MaterialTheme.typography.bodyMedium, color = valueColor, fontWeight = FontWeight.Bold)
     }
 }
 
 private fun copyToClipboard(context: Context, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("SHULEE Profile Link", text)
+    val clip = ClipData.newPlainText("SHLEE Candidate Badge", text)
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, "📋 Share link copied to clipboard!", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "📋 Candidate index & streak copied to clipboard!", Toast.LENGTH_SHORT).show()
 }
 
-private fun shareQrCode(context: Context, profile: UserProfile, url: String) {
+private fun shareQrCode(context: Context, profile: UserProfile, content: String) {
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(
             Intent.EXTRA_TEXT,
-            "Check out my SHULEE candidate revision badge! 🔥 ${profile.currentStreak}-day study streak at ${profile.school}. View stats: $url"
+            "Official UNEB Candidate Revision Pass\nIndex No: ${profile.studentId}\nCandidate: ${profile.name}\nStreak: 🔥 ${profile.currentStreak} Days\n\n$content"
         )
         type = "text/plain"
     }
-    val shareIntent = Intent.createChooser(sendIntent, "Share Student Profile")
+    val shareIntent = Intent.createChooser(sendIntent, "Share Student Profile & QR Pass")
     context.startActivity(shareIntent)
 }

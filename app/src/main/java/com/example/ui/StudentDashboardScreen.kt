@@ -470,19 +470,40 @@ private fun WelcomeHeaderCard(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    Text(
-                        text = "ID: ${userProfile.studentId} • UNEB Center 2026",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
-                        fontSize = 11.sp
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Index: ${userProfile.studentId}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextSecondary,
+                            fontSize = 11.sp
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Surface(
+                            onClick = onShareClick,
+                            color = AmberPrimary.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(6.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, AmberPrimary.copy(alpha = 0.4f)),
+                            modifier = Modifier.testTag("profile_view_qr_badge_button")
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(Icons.Default.QrCode, contentDescription = "View QR", tint = AmberLight, modifier = Modifier.size(12.dp))
+                                Spacer(modifier = Modifier.width(3.dp))
+                                Text("QR Pass", fontSize = 10.sp, color = AmberLight, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
                 }
 
-                // Streak Pill
+                // Streak Pill (tap to view QR badge)
                 Surface(
+                    onClick = onShareClick,
                     color = FlameOrange.copy(alpha = 0.18f),
                     shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, FlameOrange.copy(alpha = 0.5f))
+                    border = androidx.compose.foundation.BorderStroke(1.dp, FlameOrange.copy(alpha = 0.5f)),
+                    modifier = Modifier.testTag("student_profile_streak_pill")
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
